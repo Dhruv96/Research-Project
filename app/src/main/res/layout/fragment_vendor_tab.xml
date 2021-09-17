@@ -8,7 +8,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textViewName"
+        android:id="@+id/textViewFName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -18,14 +18,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/editTextFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewName"
+        app:layout_constraintStart_toEndOf="@+id/textViewFName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_marginTop="32dp"
         android:text="Email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewFName" />
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -48,7 +48,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewEmail"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextFirstName" />
 
     <TextView
         android:id="@+id/textViewPhn"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
 
     <EditText
-        android:id="@+id/editTextPhn"
+        android:id="@+id/editTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -91,7 +91,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewAddress"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhn" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <TextView
         android:id="@+id/textViewCity"
@@ -116,7 +116,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextAddress" />
 
     <Button
-        android:id="@+id/SignUp"
+        android:id="@+id/signup_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
