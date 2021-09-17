@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "870531517292",
+    "project_id": "rentitnow-53670",
+    "storage_bucket": "rentitnow-53670.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870531517292:android:16e001392fcd97a0244149",
+        "android_client_info": {
+          "package_name": "com.example.rentitnow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870531517292-o1nenc3bpt7mmiedh5lfgfjq2eeilcrm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqcZGJ90x4VAIIyWLHY-DOWZY_bgelZa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870531517292-o1nenc3bpt7mmiedh5lfgfjq2eeilcrm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
