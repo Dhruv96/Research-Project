@@ -1,4 +1,8 @@
 package com.example.rentitnow
 
-class Vendor {
-}
+class Vendor (
+    var fname: String,
+    var lname:String,
+    var email: String,
+    var address:String,
+    var city: String): java.io.Serializable
