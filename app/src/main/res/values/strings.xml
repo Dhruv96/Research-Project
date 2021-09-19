@@ -17,4 +17,8 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="dob">Date Of Birth</string>
+    <string name="vendor_signin">Vendor SignIn</string>
+    <string name="add_license_number">License Number</string>
+    <string name="add_license_image">Add License Image</string>
+    <string name="upload_signin"><![CDATA[Upload License Details & Sign In]]></string>
 </resources>
