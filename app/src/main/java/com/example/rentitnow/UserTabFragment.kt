@@ -11,11 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.rentitnow.Helpers.Companion.transformIntoDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.fragment_user_tab.*
 
 
@@ -26,8 +30,28 @@ import kotlinx.android.synthetic.main.fragment_user_tab.*
  */
 class UserTabFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
-    private val OPERATION_CHOOSE_PHOTO = 2
+    private val OPERATION_CHOOSE_PHOTO = 1
     lateinit var fileUrl: Uri
+    lateinit var user: User
+    val storageRef = Firebase.storage.reference
+
+    private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            if(uri == null) {
+                println("NULL URI")
+            }
+            else {
+                println("NOT NULL URI")
+            }
+            SelectUserImage.setImageURI(uri)
+            println("URI:")
+            println(uri.toString())
+            fileUrl = uri
+            println("FILE URL:")
+            println(fileUrl)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +81,10 @@ class UserTabFragment : Fragment() {
         })
 
         SelectUserImage.setOnClickListener(View.OnClickListener {
-            openGallery()
+            selectImageFromGallery()
         })
+
+        editTextDOB.transformIntoDatePicker(requireContext(), "dd-MMM-yyyy")
 
         signup_btn.setOnClickListener(View.OnClickListener {
             val email = editTextEmail.text.toString()
@@ -66,6 +92,7 @@ class UserTabFragment : Fragment() {
             val fname = editTextFirstName.text.toString()
             var lname = editTextLastName.text.toString()
             var gender = if (maleRdb.isChecked) "Male" else "Female"
+            val dob = editTextDOB.text.toString()
             println(email.trim())
             println(password.trim())
             println(fname.trim())
@@ -75,23 +102,45 @@ class UserTabFragment : Fragment() {
                     password.trim() != "" &&
                     fname.trim() != "" &&
                     lname.trim() != "" &&
-                    (maleRdb.isChecked || femaleRdb.isChecked)) {
+                    (maleRdb.isChecked || femaleRdb.isChecked) && dob.trim() != "") {
 
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(requireActivity()) { task ->
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
                                 println("Success")
-                                val user = User(fname, lname, email, null, "", "", "01/01/1996", gender)
-                                println(user)
-                                val intent = Intent(activity, LicenseDetailsActivity::class.java)
-                                intent.putExtra(LicenseDetailsActivity.USER_OBJ, user)
-                                startActivity(intent)
+                                if (!this::fileUrl.isInitialized) {
+                                    user = User(fname, lname, email, null, "", "", dob, gender)
+                                    println(user)
+                                    val intent = Intent(activity, LicenseDetailsActivity::class.java)
+                                    intent.putExtra(LicenseDetailsActivity.USER_OBJ, user)
+                                    startActivity(intent)
+
+                                }
+                                else {
+                                    val currentUserImageRef = storageRef.child("images/${auth.currentUser?.uid}")
+                                    val uploadTask = currentUserImageRef.putFile(fileUrl)
+                                    // Register observers to listen for when the download is done or if it fails
+                                    uploadTask.addOnFailureListener {
+                                        // Handle unsuccessful uploads
+                                    }.addOnSuccessListener { taskSnapshot ->
+                                        // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                                        taskSnapshot.metadata!!.reference!!.downloadUrl.addOnCompleteListener{task ->
+                                            val downloadUrl = task.result!!.toString()
+                                            user = User(fname, lname, email, downloadUrl, "", "", dob, gender)
+                                            println(user)
+                                            val intent = Intent(activity, LicenseDetailsActivity::class.java)
+                                            intent.putExtra(LicenseDetailsActivity.USER_OBJ, user)
+                                            startActivity(intent)
+                                        }
+
+                                    }
+                                }
 
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                                Toast.makeText(activity, "Authentication failed.",
+                                Toast.makeText(activity, task.exception?.localizedMessage,
                                         Toast.LENGTH_SHORT).show()
                                 //updateUI(null)
                             }
@@ -101,22 +150,6 @@ class UserTabFragment : Fragment() {
             }
         })
     }
-    private fun openGallery(){
-        val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"
-        startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == OPERATION_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK && null != data) {
-            val selectedImage = data.data
-            SelectUserImage.setImageURI(selectedImage)
-            if (selectedImage != null) {
-                fileUrl = selectedImage
-                println(fileUrl)
-            }
-        }
-    }
+    private fun selectImageFromGallery() = selectImageFromGalleryResult.launch("image/*")
 
 }
