@@ -3,6 +3,7 @@ package com.example.rentitnow
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_license_details.*
 import kotlinx.android.synthetic.main.fragment_user_tab.*
+import java.sql.DriverManager.println
+
 
 class LicenseDetailsActivity : AppCompatActivity() {
 

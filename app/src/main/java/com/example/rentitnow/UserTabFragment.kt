@@ -21,6 +21,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.fragment_user_tab.*
+import java.sql.DriverManager.println
 
 
 /**
@@ -93,10 +94,6 @@ class UserTabFragment : Fragment() {
             var lname = editTextLastName.text.toString()
             var gender = if (maleRdb.isChecked) "Male" else "Female"
             val dob = editTextDOB.text.toString()
-            println(email.trim())
-            println(password.trim())
-            println(fname.trim())
-            println(lname.trim())
 
             if (email.trim() != "" &&
                     password.trim() != "" &&
