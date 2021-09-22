@@ -41,4 +41,6 @@
         <item>Vancouver</item>
         <item>Surrey</item>
     </string-array>
+    <string name="facebook_app_id">925481281659139</string>
+    <string name="fb_login_protocol_scheme">fb925481281659139</string>
 </resources>
