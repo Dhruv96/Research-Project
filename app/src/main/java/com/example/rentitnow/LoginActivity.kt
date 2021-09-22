@@ -3,12 +3,15 @@ package com.example.rentitnow
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.*
+import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -22,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 class LoginActivity : AppCompatActivity() {
@@ -49,33 +54,52 @@ class LoginActivity : AppCompatActivity() {
             .build()
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-        facebookLogin.setOnClickListener(View.OnClickListener {
+        login_button.setOnClickListener(View.OnClickListener {
+//            PrintKeyHash()
             signInWithFacebook()
         })
 
         googlesigninBtn.setOnClickListener(View.OnClickListener {
+
             signInWithGoogle()
         })
     }
 
+//    private fun PrintKeyHash() {
+//        try {
+//            val info = packageManager.getPackageInfo(
+//                    "com.example.rentitnow",
+//                    PackageManager.GET_SIGNATURES)
+//            for (signature in info.signatures) {
+//                val md = MessageDigest.getInstance("SHA")
+//                md.update(signature.toByteArray())
+//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+//            }
+//        } catch (e: PackageManager.NameNotFoundException) {
+//
+//        } catch (e: NoSuchAlgorithmException) {
+//
+//        }
+//    }
+
     private fun signInWithFacebook() {
-        buttonFacebookLogin.setReadPermissions("email", "public_profile")
-        buttonFacebookLogin.registerCallback(
-            callbackManager,
-            object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    Log.d(TAG, "facebook:onSuccess:$loginResult")
-                    handleFacebookAccessToken(loginResult.accessToken)
-                }
+        login_button.setReadPermissions("email", "public_profile")
+        login_button.registerCallback(
+                callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+                        Log.d(TAG, "facebook:onSuccess:$loginResult")
+                        handleFacebookAccessToken(loginResult.accessToken)
+                    }
 
-                override fun onCancel() {
-                    Log.d(TAG, "facebook:onCancel")
-                }
+                    override fun onCancel() {
+                        Log.d(TAG, "facebook:onCancel")
+                    }
 
-                override fun onError(error: FacebookException) {
-                    Log.d(TAG, "facebook:onError", error)
-                }
-            })
+                    override fun onError(error: FacebookException) {
+                        Log.d(TAG, "facebook:onError", error)
+                    }
+                })
     }
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
@@ -92,13 +116,15 @@ class LoginActivity : AppCompatActivity() {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.exception)
                         Toast.makeText(
-                            baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT
+                                baseContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT
                         ).show()
                         updateUI(null)
                     }
                 }
     }
+
+
 
 
     private fun signInWithGoogle() {
