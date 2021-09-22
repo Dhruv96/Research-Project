@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.util.Log.d
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,12 +28,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.logging.Logger
 
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var callbackManager: CallbackManager
-    private lateinit var buttonFacebookLogin: LoginButton
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -55,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         login_button.setOnClickListener(View.OnClickListener {
-//            PrintKeyHash()
             signInWithFacebook()
         })
 
@@ -65,22 +65,6 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-//    private fun PrintKeyHash() {
-//        try {
-//            val info = packageManager.getPackageInfo(
-//                    "com.example.rentitnow",
-//                    PackageManager.GET_SIGNATURES)
-//            for (signature in info.signatures) {
-//                val md = MessageDigest.getInstance("SHA")
-//                md.update(signature.toByteArray())
-//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-//            }
-//        } catch (e: PackageManager.NameNotFoundException) {
-//
-//        } catch (e: NoSuchAlgorithmException) {
-//
-//        }
-//    }
 
     private fun signInWithFacebook() {
         login_button.setReadPermissions("email", "public_profile")
@@ -112,6 +96,39 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(TAG, "signInWithCredential:success")
                         val user = auth.currentUser
                         updateUI(user)
+
+                        val request = GraphRequest.newMeRequest(token) { `object`, response ->
+                            try {
+                                //here is the data that you want
+                                Log.d("FBLOGIN_JSON_RES", `object`.toString())
+
+                                if (`object`.has("id")) {
+                                    val nameArray = user?.displayName?.split(" ")
+                                    val firstName = nameArray?.get(0)
+                                    val lastname = nameArray?.get(1)
+                                    val email = user?.email
+                                    val photoUrl = user?.photoUrl.toString()
+                                    if(firstName != null && lastname != null && email != null ) {
+                                        val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
+                                        val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
+                                        intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
+                                        startActivity(intent)
+                                    }
+
+                                } else {
+                                    Log.e("FBLOGIN_FAILD", `object`.toString())
+                                }
+
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+//                                dismissDialogLogin()
+                            }
+                        }
+
+                        val parameters = Bundle()
+                        parameters.putString("fields", "name,email,id,picture.type(large)")
+                        request.parameters = parameters
+                        request.executeAsync()
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.exception)
