@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+
+import com.facebook.CallbackManager
+
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rentitnow.LicenseDetailsActivity.Companion.USER_OBJ
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -19,10 +22,12 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
+    lateinit var callbackManager: CallbackManager
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private val RC_SIGN_IN = 100
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

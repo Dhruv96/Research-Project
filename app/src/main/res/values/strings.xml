@@ -31,6 +31,8 @@
     <string name="others">Others</string>
     <string name="share">Share</string>
     <string name="logout">Log Out</string>
+
+    <string name="or">OR</string>
     <string name="additional_info">Additional Info Required</string>
     <string name="cont">Continue</string>
     <string-array name="Cities">
