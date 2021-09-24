@@ -43,4 +43,6 @@
     </string-array>
     <string name="facebook_app_id">925481281659139</string>
     <string name="fb_login_protocol_scheme">fb925481281659139</string>
+    <string name="cont_as_user">Continue as user</string>
+    <string name="cont_as_vendor">Continue as Vendor</string>
 </resources>
