@@ -123,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
                                     }
                                     else {
                                         if(firstName != null && lastname != null && email != null ) {
-                                            val currentVendor = Vendor(firstName, lastname, email, "", "")
+                                            val currentVendor = Vendor(firstName, lastname, email, "", "","")
                                             val intent = Intent(this, SignInWithSocialAdditionalVendorData::class.java)
                                             intent.putExtra(SignInWithSocialAdditionalVendorData.VENDOR_OBJ, currentVendor)
                                             startActivity(intent)
@@ -210,7 +210,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     else {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentVendor = Vendor(firstName, lastname, email, "", "")
+                            val currentVendor = Vendor(firstName, lastname, email, "", "","")
                             val intent = Intent(this, SignInWithSocialAdditionalVendorData::class.java)
                             intent.putExtra(SignInWithSocialAdditionalVendorData.VENDOR_OBJ, currentVendor)
                             startActivity(intent)
