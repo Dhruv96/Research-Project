@@ -9,6 +9,8 @@ import android.util.Base64
 import android.util.Log
 import android.util.Log.d
 import android.view.View
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.*
@@ -38,35 +40,38 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private val RC_SIGN_IN = 100
-
+    var userSignin = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val myScope = Scope("https://www.googleapis.com/auth/user.birthday.read")
-        val myScope2 = Scope(Scopes.PLUS_ME)
-        val myScope3 = Scope(Scopes.PROFILE) //get name and id
+        val myScope = Scope(Scopes.PROFILE) //get name and id
         callbackManager= CallbackManager.Factory.create()
         setContentView(R.layout.activity_login)
+        // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .requestScopes(myScope, myScope2, myScope3)
-            .requestProfile()
-            .build()
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+
         login_button.setOnClickListener(View.OnClickListener {
-            signInWithFacebook()
+            displayPopup(null, login_button)
+            Log.v("tag", "1")
         })
 
         googlesigninBtn.setOnClickListener(View.OnClickListener {
 
-            signInWithGoogle()
+            displayPopup(googlesigninBtn, null)
         })
     }
 
 
     private fun signInWithFacebook() {
+        Log.v("tag", "3")
         login_button.setReadPermissions("email", "public_profile")
         login_button.registerCallback(
                 callbackManager,
@@ -95,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success")
                         val user = auth.currentUser
-                        updateUI(user)
+
 
                         val request = GraphRequest.newMeRequest(token) { `object`, response ->
                             try {
@@ -108,11 +113,21 @@ class LoginActivity : AppCompatActivity() {
                                     val lastname = nameArray?.get(1)
                                     val email = user?.email
                                     val photoUrl = user?.photoUrl.toString()
-                                    if(firstName != null && lastname != null && email != null ) {
-                                        val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
-                                        val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
-                                        intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
-                                        startActivity(intent)
+                                    if(userSignin) {
+                                        if(firstName != null && lastname != null && email != null ) {
+                                            val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
+                                            val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
+                                            intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
+                                            startActivity(intent)
+                                        }
+                                    }
+                                    else {
+                                        if(firstName != null && lastname != null && email != null ) {
+                                            val currentVendor = Vendor(firstName, lastname, email, "", "")
+                                            val intent = Intent(this, SignInWithSocialAdditionalVendorData::class.java)
+                                            intent.putExtra(SignInWithSocialAdditionalVendorData.VENDOR_OBJ, currentVendor)
+                                            startActivity(intent)
+                                        }
                                     }
 
                                 } else {
@@ -136,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
                                 baseContext, "Authentication failed.",
                                 Toast.LENGTH_SHORT
                         ).show()
-                        updateUI(null)
+
                     }
                 }
     }
@@ -185,12 +200,23 @@ class LoginActivity : AppCompatActivity() {
                     val lastname = nameArray?.get(1)
                     val email = user?.email
                     val photoUrl = user?.photoUrl.toString()
-                    if(firstName != null && lastname != null && email != null ) {
-                        val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
-                        val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
-                        intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
-                        startActivity(intent)
+                    if(userSignin) {
+                        if(firstName != null && lastname != null && email != null ) {
+                            val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
+                            val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
+                            intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
+                            startActivity(intent)
+                        }
                     }
+                    else {
+                        if(firstName != null && lastname != null && email != null ) {
+                            val currentVendor = Vendor(firstName, lastname, email, "", "")
+                            val intent = Intent(this, SignInWithSocialAdditionalVendorData::class.java)
+                            intent.putExtra(SignInWithSocialAdditionalVendorData.VENDOR_OBJ, currentVendor)
+                            startActivity(intent)
+                        }
+                    }
+
                 }
                 else {
                     // If sign in fails, display a message to the user.
@@ -198,13 +224,49 @@ class LoginActivity : AppCompatActivity() {
                 }
                 }
             }
+
+    private fun displayPopup(googleButton: ImageButton?, facebookButton: LoginButton?) {
+        var popupMenu: PopupMenu
+        if(googleButton != null) {
+            popupMenu = PopupMenu(this, googleButton)
+        }
+        else {
+            popupMenu = PopupMenu(this, facebookButton)
+        }
+        popupMenu.menuInflater.inflate(R.menu.signin_choice,popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+            when(item.itemId) {
+                R.id.action_user -> {
+                    userSignin = true
+                    if(googleButton != null) {
+                        signInWithGoogle()
+                    }
+                    else {
+                        Log.v("tag", "2")
+                        signInWithFacebook()
+                    }
+                }
+
+                R.id.action_vendor -> {
+                    userSignin = false
+                    if(googleButton != null) {
+                        signInWithGoogle()
+                    }
+                    else {
+                        Log.v("tag", "2")
+                        signInWithFacebook()
+                    }
+                }
+
+            }
+            true
+        })
+        popupMenu.show()
+    }
     }
 
 
 
-private fun updateUI(user: FirebaseUser?) {
-
-}
 
 
 

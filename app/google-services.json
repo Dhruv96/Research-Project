@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "870531517292",
-    "project_id": "rentitnow-53670",
-    "storage_bucket": "rentitnow-53670.appspot.com"
+    "project_number": "898966824599",
+    "project_id": "rentitnow-23250",
+    "storage_bucket": "rentitnow-23250.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:870531517292:android:16e001392fcd97a0244149",
+        "mobilesdk_app_id": "1:898966824599:android:ad90b181b53838d3baebd2",
         "android_client_info": {
           "package_name": "com.example.rentitnow"
         }
       },
       "oauth_client": [
         {
-          "client_id": "870531517292-o1nenc3bpt7mmiedh5lfgfjq2eeilcrm.apps.googleusercontent.com",
+          "client_id": "898966824599-ljd09f4ci8t9esng53t8ado8kblk00hm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rentitnow",
+            "certificate_hash": "a8bcdf1b285e285004995b078072d60ff494f6b5"
+          }
+        },
+        {
+          "client_id": "898966824599-ivfof3b1pr7kv8r2jr9gt458k43aolvd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDqcZGJ90x4VAIIyWLHY-DOWZY_bgelZa8"
+          "current_key": "AIzaSyDFLwjtEIiDfYjkMXmrPrLZ1L1dR_ydTVA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "870531517292-o1nenc3bpt7mmiedh5lfgfjq2eeilcrm.apps.googleusercontent.com",
+              "client_id": "898966824599-ivfof3b1pr7kv8r2jr9gt458k43aolvd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
