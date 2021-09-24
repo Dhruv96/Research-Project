@@ -16,7 +16,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_user_tab.*
 import kotlinx.android.synthetic.main.fragment_user_tab.editTextEmail
 import kotlinx.android.synthetic.main.fragment_user_tab.editTextFirstName
-import kotlinx.android.synthetic.main.fragment_user_tab.signup_btn
+import kotlinx.android.synthetic.main.fragment_user_tab.continue_btn_vendor
 import kotlinx.android.synthetic.main.fragment_vendor_tab.*
 import java.sql.DriverManager.println
 
@@ -41,11 +41,12 @@ class VendorTabFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
 
-        signup_btn.setOnClickListener(View.OnClickListener {
+        continue_btn_vendor.setOnClickListener(View.OnClickListener {
             val email = editTextEmail.text.toString()
             val password = editTextPswd.text.toString()
             val fname = editTextFirstName.text.toString()
             var lname = editTextLName.text.toString()
+            var phnNumber= editTextPhn.text.toString()
             var address = editTextAddress.text.toString()
             var city = spinnerCity.selectedItem.toString()
 
@@ -53,6 +54,7 @@ class VendorTabFragment : Fragment() {
                     password.trim() != "" &&
                     fname.trim() != "" &&
                     lname.trim() != "" &&
+                    phnNumber.trim() != "" &&
                 address.trim() != "" &&
                 city.trim() != "" ) {
 
@@ -61,7 +63,7 @@ class VendorTabFragment : Fragment() {
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
                                 println("Success")
-                                val vendor=Vendor(fname,lname,email,address,city)
+                                val vendor=Vendor(fname,lname,email,phnNumber,address,city)
                                 databaseRef.child("vendors").child(auth.currentUser!!.uid).setValue(vendor)
                                 val intent = Intent(activity, VendorCarsActivity::class.java)
                                 startActivity(intent)

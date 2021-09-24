@@ -167,7 +167,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextAddress" />
 
     <Button
-        android:id="@+id/signup_btn"
+        android:id="@+id/continue_btn_vendor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"

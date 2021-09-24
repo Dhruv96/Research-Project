@@ -85,7 +85,7 @@ class UserTabFragment : Fragment() {
 
         editTextDOB.transformIntoDatePicker(requireContext(), "dd-MMM-yyyy")
 
-        signup_btn.setOnClickListener(View.OnClickListener {
+        continue_btn_vendor.setOnClickListener(View.OnClickListener {
             val email = editTextEmail.text.toString()
             val password = editTextPasswordSignup.text.toString()
             val fname = editTextFirstName.text.toString()
