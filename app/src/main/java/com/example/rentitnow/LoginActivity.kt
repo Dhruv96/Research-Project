@@ -3,34 +3,25 @@ package com.example.rentitnow
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
-import android.util.Log.d
 import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.*
-import com.facebook.appevents.AppEventsLogger
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.util.logging.Logger
+import java.util.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -44,8 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val myScope = Scope(Scopes.PROFILE) //get name and id
-        callbackManager= CallbackManager.Factory.create()
+        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login)
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -59,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         login_button.setOnClickListener(View.OnClickListener {
+
             displayPopup(null, login_button)
             Log.v("tag", "1")
         })
@@ -67,28 +58,53 @@ class LoginActivity : AppCompatActivity() {
 
             displayPopup(googlesigninBtn, null)
         })
-    }
 
-
-    private fun signInWithFacebook() {
-        Log.v("tag", "3")
-        login_button.setReadPermissions("email", "public_profile")
-        login_button.registerCallback(
+        LoginManager.getInstance().registerCallback(
                 callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(loginResult: LoginResult) {
-                        Log.d(TAG, "facebook:onSuccess:$loginResult")
-                        handleFacebookAccessToken(loginResult.accessToken)
+                object : FacebookCallback<LoginResult?> {
+                    override fun onSuccess(loginResult: LoginResult?) {
+                        // Handle success
+                        if (loginResult != null) {
+                            handleFacebookAccessToken(loginResult.accessToken)
+                        }
                     }
 
                     override fun onCancel() {
                         Log.d(TAG, "facebook:onCancel")
                     }
-
-                    override fun onError(error: FacebookException) {
-                        Log.d(TAG, "facebook:onError", error)
+                    override fun onError(exception: FacebookException) {
+                        Log.d(TAG, "facebook:onError", exception)
                     }
-                })
+                }
+        )
+    }
+
+
+    private fun signInWithFacebook() {
+        Log.v("tag", "3")
+
+        LoginManager.getInstance().logInWithReadPermissions(
+                this,
+                Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
+        )
+
+//        login_button.setReadPermissions("email", "public_profile")
+//        login_button.registerCallback(
+//                callbackManager,
+//                object : FacebookCallback<LoginResult> {
+//                    override fun onSuccess(loginResult: LoginResult) {
+//                        Log.d(TAG, "facebook:onSuccess:$loginResult")
+//                        handleFacebookAccessToken(loginResult.accessToken)
+//                    }
+//
+//                    override fun onCancel() {
+//                        Log.d(TAG, "facebook:onCancel")
+//                    }
+//
+//                    override fun onError(error: FacebookException) {
+//                        Log.d(TAG, "facebook:onError", error)
+//                    }
+//                })
     }
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
@@ -225,7 +241,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-    private fun displayPopup(googleButton: ImageButton?, facebookButton: LoginButton?) {
+    private fun displayPopup(googleButton: ImageButton?, facebookButton: ImageButton?) {
         var popupMenu: PopupMenu
         if(googleButton != null) {
             popupMenu = PopupMenu(this, googleButton)
@@ -233,15 +249,14 @@ class LoginActivity : AppCompatActivity() {
         else {
             popupMenu = PopupMenu(this, facebookButton)
         }
-        popupMenu.menuInflater.inflate(R.menu.signin_choice,popupMenu.menu)
+        popupMenu.menuInflater.inflate(R.menu.signin_choice, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.action_user -> {
                     userSignin = true
-                    if(googleButton != null) {
+                    if (googleButton != null) {
                         signInWithGoogle()
-                    }
-                    else {
+                    } else {
                         Log.v("tag", "2")
                         signInWithFacebook()
                     }
@@ -249,10 +264,9 @@ class LoginActivity : AppCompatActivity() {
 
                 R.id.action_vendor -> {
                     userSignin = false
-                    if(googleButton != null) {
+                    if (googleButton != null) {
                         signInWithGoogle()
-                    }
-                    else {
+                    } else {
                         Log.v("tag", "2")
                         signInWithFacebook()
                     }
