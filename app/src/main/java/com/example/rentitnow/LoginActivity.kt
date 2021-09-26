@@ -17,6 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -27,6 +29,7 @@ import java.util.*
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var callbackManager: CallbackManager
+
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -59,6 +62,17 @@ class LoginActivity : AppCompatActivity() {
             displayPopup(googlesigninBtn, null)
         })
 
+        signupButton.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, SignupActivity::class.java))
+        })
+
+        loginButton.setOnClickListener(View.OnClickListener {
+
+            loginAction()
+        })
+
+
+
         LoginManager.getInstance().registerCallback(
                 callbackManager,
                 object : FacebookCallback<LoginResult?> {
@@ -72,11 +86,71 @@ class LoginActivity : AppCompatActivity() {
                     override fun onCancel() {
                         Log.d(TAG, "facebook:onCancel")
                     }
+
                     override fun onError(exception: FacebookException) {
                         Log.d(TAG, "facebook:onError", exception)
                     }
                 }
         )
+    }
+
+    private fun loginAction() {
+
+
+        //Check for empty fields and then login
+        if (emailEditText.getText().toString() == "") {
+            Toast.makeText(this, "Please enter email address.", Toast.LENGTH_SHORT).show()
+//        } else if (isEmailValid(emailEditText.getText().toString()))
+//            {
+//            Toast.makeText(this, "Please enter a valid email.", Toast.LENGTH_SHORT).show()
+        } else if (passwordEditText.getText().toString() == "") {
+            Toast.makeText(this, "Please enter password.", Toast.LENGTH_SHORT).show()
+        } else {
+
+            checkInFirebase()
+
+        }
+    }
+
+    fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun checkInFirebase() {
+
+        //Start HUD
+
+//        hud.show()
+
+        //Firebase authentication
+        auth.signInWithEmailAndPassword(
+                emailEditText.getText().toString(),
+                passwordEditText.getText().toString()
+        )
+            .addOnCompleteListener(this,
+                    OnCompleteListener<AuthResult?> { task ->
+                        if (task.isSuccessful) {
+
+                            try {
+                                val preferences = getSharedPreferences("users", MODE_PRIVATE)
+                                val pref = applicationContext.getSharedPreferences("users", 0) // 0 - for private mode
+                                preferences.edit().putBoolean("LOGGEDIN", true).apply()
+
+                                startActivity(Intent(this, NavigationActivity::class.java))
+                            } catch (ex: java.lang.Exception) {
+                                Toast.makeText(this, "Error occured!!", Toast.LENGTH_SHORT).show()
+                            }
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+//                        hud.dismiss()
+                            Log.w("FIREBASE ::", "signInWithEmail:failure", task.exception)
+                            Toast.makeText(
+                                    this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
     }
 
 
@@ -88,23 +162,7 @@ class LoginActivity : AppCompatActivity() {
                 Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
         )
 
-//        login_button.setReadPermissions("email", "public_profile")
-//        login_button.registerCallback(
-//                callbackManager,
-//                object : FacebookCallback<LoginResult> {
-//                    override fun onSuccess(loginResult: LoginResult) {
-//                        Log.d(TAG, "facebook:onSuccess:$loginResult")
-//                        handleFacebookAccessToken(loginResult.accessToken)
-//                    }
-//
-//                    override fun onCancel() {
-//                        Log.d(TAG, "facebook:onCancel")
-//                    }
-//
-//                    override fun onError(error: FacebookException) {
-//                        Log.d(TAG, "facebook:onError", error)
-//                    }
-//                })
+
     }
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
@@ -131,17 +189,45 @@ class LoginActivity : AppCompatActivity() {
                                     val photoUrl = user?.photoUrl.toString()
                                     if(userSignin) {
                                         if(firstName != null && lastname != null && email != null ) {
-                                            val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
-                                            val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
-                                            intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
+                                            val currentUser = User(
+                                                    firstName,
+                                                    lastname,
+                                                    email,
+                                                    photoUrl,
+                                                    "",
+                                                    "",
+                                                    "",
+                                                    ""
+                                            )
+                                            val intent = Intent(
+                                                    this,
+                                                    SignInWithGoogleAdditionalDetails::class.java
+                                            )
+                                            intent.putExtra(
+                                                    SignInWithGoogleAdditionalDetails.USER_OBJ,
+                                                    currentUser
+                                            )
                                             startActivity(intent)
                                         }
                                     }
                                     else {
                                         if(firstName != null && lastname != null && email != null ) {
-                                            val currentVendor = Vendor(firstName, lastname, email, "", "","")
-                                            val intent = Intent(this, SignInWithSocialAdditionalVendorData::class.java)
-                                            intent.putExtra(SignInWithSocialAdditionalVendorData.VENDOR_OBJ, currentVendor)
+                                            val currentVendor = Vendor(
+                                                    firstName,
+                                                    lastname,
+                                                    email,
+                                                    "",
+                                                    "",
+                                                    ""
+                                            )
+                                            val intent = Intent(
+                                                    this,
+                                                    SignInWithSocialAdditionalVendorData::class.java
+                                            )
+                                            intent.putExtra(
+                                                    SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
+                                                    currentVendor
+                                            )
                                             startActivity(intent)
                                         }
                                     }
@@ -218,7 +304,16 @@ class LoginActivity : AppCompatActivity() {
                     val photoUrl = user?.photoUrl.toString()
                     if(userSignin) {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentUser = User(firstName, lastname, email, photoUrl, "", "", "", "")
+                            val currentUser = User(
+                                    firstName,
+                                    lastname,
+                                    email,
+                                    photoUrl,
+                                    "",
+                                    "",
+                                    "",
+                                    ""
+                            )
                             val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
                             intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
                             startActivity(intent)
@@ -226,9 +321,15 @@ class LoginActivity : AppCompatActivity() {
                     }
                     else {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentVendor = Vendor(firstName, lastname, email, "", "","")
-                            val intent = Intent(this, SignInWithSocialAdditionalVendorData::class.java)
-                            intent.putExtra(SignInWithSocialAdditionalVendorData.VENDOR_OBJ, currentVendor)
+                            val currentVendor = Vendor(firstName, lastname, email, "", "", "")
+                            val intent = Intent(
+                                    this,
+                                    SignInWithSocialAdditionalVendorData::class.java
+                            )
+                            intent.putExtra(
+                                    SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
+                                    currentVendor
+                            )
                             startActivity(intent)
                         }
                     }
