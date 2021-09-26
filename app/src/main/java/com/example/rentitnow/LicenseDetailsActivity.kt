@@ -64,7 +64,7 @@ class LicenseDetailsActivity : AppCompatActivity() {
                             println(user)
                             // Adding user to database
                             databaseRef.child("users").child(auth.currentUser!!.uid).setValue(user)
-                            val intent = Intent(this, UserHomeActivity::class.java)
+                            val intent = Intent(this, NavigationActivity::class.java)
                             startActivity(intent)
                         }
 

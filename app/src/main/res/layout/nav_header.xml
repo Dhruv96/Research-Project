@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/maleuser" />
 
     <TextView
-        android:id="@+id/nameView"
+        android:id="@+id/nameViewProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -30,12 +30,12 @@
         app:layout_constraintTop_toBottomOf="@+id/userimageView" />
 
     <TextView
-        android:id="@+id/emailView"
+        android:id="@+id/emailViewProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="#414141"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameView" />
+        app:layout_constraintTop_toBottomOf="@+id/nameViewProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
