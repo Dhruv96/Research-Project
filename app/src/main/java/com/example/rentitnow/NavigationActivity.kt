@@ -3,6 +3,7 @@ package com.example.rentitnow
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
 import com.example.rentitnow.Navigation.UserHomeFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,53 +23,42 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.nav_header.*
 
 class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private lateinit var drawerLayout: DrawerLayout
+
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var databaseRef : DatabaseReference
     private lateinit var pref: SharedPreferences
+    lateinit var drawerLayout: DrawerLayout
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_home)
-
+        drawerLayout=findViewById(R.id.drawer_layout)
+        var navigationView: NavigationView=findViewById(R.id.nav_view)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolbar)
-
-        drawerLayout = findViewById(R.id.drawer_layout)
-
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+        navigationView.setNavigationItemSelectedListener(this)
+        auth = FirebaseAuth.getInstance()
 
-        //Call shared  pref to get data profile
-//        pref = applicationContext.getSharedPreferences("users", 0)
-        databaseRef=FirebaseDatabase.getInstance().getReference()
-        databaseRef.child("users").addValueEventListener(object : ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val user: User? = snapshot.getValue(User::class.java)
-                    nameViewProfile.setText(user?.fname)
-                    emailViewProfile.setText(user?.email)
-
-//                    Glide.with(this).load(user?.profileImgUrl).into(userimageView)
-
-                }
-
+        databaseRef=FirebaseDatabase.getInstance().getReference("users")
+        val user = auth.currentUser
+        val id=user?.uid
+        databaseRef.child(id.toString()).get().addOnSuccessListener {
+            if (it.exists()){
+                val firstname=it.child("fname").value
+                val email=it.child("email").value
+                val photoURL=it.child("profileImgUrl").value
+                nameViewProfile.setText(firstname.toString())
+                emailViewProfile.setText(email.toString())
+                Glide.with(this).load(photoURL).into(userimageView)
 
             }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-
-
-//        nameViewProfile.setText(pref.getString("fname", ""))
-//        emailViewProfile.setText(pref.getString("email", ""))
-//
-//        Glide.with(this).load(pref.getString("profileImgUrl", "")).into(userimageView)
+        }.addOnFailureListener {
+            Log.e("FBLOGIN_FAILD", "error retriving data")
+        }
 
 
 
@@ -105,14 +96,7 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
             R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
             R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
-//            R.id.nav_share -> {
-//                //Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
-//                val sendIntent = Intent()
-//                sendIntent.action = Intent.ACTION_SEND
-//                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this amazing application to rent cars - Quick Rentals") // Simple text and URL to share
-//                sendIntent.type = "text/plain"
-//                this.startActivity(sendIntent)
-//            }
+
             R.id.nav_logout -> signOut(pref.getInt("loginType", 0))
         }
         drawerLayout.closeDrawer(GravityCompat.START)

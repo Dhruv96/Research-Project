@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
 
                             try {
                                 val preferences = getSharedPreferences("users", MODE_PRIVATE)
-                                val pref = applicationContext.getSharedPreferences("users", 0) // 0 - for private mode
+//                                val pref = applicationContext.getSharedPreferences("users", 0) // 0 - for private mode
                                 preferences.edit().putBoolean("LOGGEDIN", true).apply()
 
                                 startActivity(Intent(this, NavigationActivity::class.java))
