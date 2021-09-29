@@ -65,7 +65,7 @@ class VendorTabFragment : Fragment() {
                                 println("Success")
                                 val vendor=Vendor(fname,lname,email,phnNumber,address,city)
                                 databaseRef.child("vendors").child(auth.currentUser!!.uid).setValue(vendor)
-                                val intent = Intent(activity, VendorCarsActivity::class.java)
+                                val intent = Intent(activity, NavigationActivityVendor::class.java)
                                 startActivity(intent)
 
                             } else {
