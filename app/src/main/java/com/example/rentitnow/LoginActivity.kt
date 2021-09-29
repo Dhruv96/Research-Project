@@ -54,8 +54,8 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         //googleSignInClient.signOut()
 
-        login_button.setOnClickListener(View.OnClickListener {
-            displayPopup(null, login_button)
+        FBlogin_button.setOnClickListener(View.OnClickListener {
+            displayPopup(null, FBlogin_button)
             Log.v("tag", "1")
         })
 
