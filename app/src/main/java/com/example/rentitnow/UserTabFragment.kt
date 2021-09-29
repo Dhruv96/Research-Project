@@ -36,12 +36,7 @@ class UserTabFragment : Fragment() {
 
     private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            if(uri == null) {
-                println("NULL URI")
-            }
-            else {
-                println("NOT NULL URI")
-            }
+
             SelectUserImage.setImageURI(uri)
             println("URI:")
             println(uri.toString())
