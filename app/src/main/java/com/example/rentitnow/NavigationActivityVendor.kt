@@ -50,10 +50,10 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
             if (it.exists()){
                 val firstname=it.child("fname").value
                 val email=it.child("email").value
-                //val photoURL=it.child("profileImgUrl").value
+                val photoURL=it.child("profileImgUrl").value
                 nameViewProfile.setText(firstname.toString())
                 emailViewProfile.setText(email.toString())
-                //Glide.with(this).load(photoURL).into(userimageView)
+                Glide.with(this).load(photoURL).into(userimageView)
 
             }
         }.addOnFailureListener {

@@ -6,4 +6,5 @@ class Vendor (
     var email: String,
     var phn: String,
     var address:String,
-    var city: String): java.io.Serializable
+    var city: String,
+    var profileImgUrl: String?): java.io.Serializable

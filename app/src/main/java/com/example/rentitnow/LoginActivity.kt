@@ -178,80 +178,87 @@ class LoginActivity : AppCompatActivity() {
                         Log.d(TAG, "signInWithCredential:success")
                         val user = auth.currentUser
 
-                            val request = GraphRequest.newMeRequest(token) { `object`, response ->
-                                try {
-                                    if (`object`.has("id")) {
-                                        val nameArray = user?.displayName?.split(" ")
-                                        val firstName = nameArray?.get(0)
-                                        val lastname = nameArray?.get(1)
-                                        val email = user?.email
-                                        val photoUrl = user?.photoUrl.toString()
 
-                                        if (userSignin) {
-                                            if (firstName != null && lastname != null && email != null) {
-                                                val currentUser = User(
-                                                        firstName,
-                                                        lastname,
-                                                        email,
-                                                        photoUrl,
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        ""
-                                                )
-                                                editor.putInt("userLoggedIn", 1)
-                                                editor.commit()
-                                                editor.apply()
-                                                val intent = Intent(
-                                                        this,
-                                                        SignInWithGoogleAdditionalDetails::class.java
-                                                )
-                                                intent.putExtra(
-                                                        SignInWithGoogleAdditionalDetails.USER_OBJ,
-                                                        currentUser
-                                                )
-                                                startActivity(intent)
-                                            }
-                                        } else {
-                                            if (firstName != null && lastname != null && email != null) {
-                                                val currentVendor = Vendor(
-                                                        firstName,
-                                                        lastname,
-                                                        email,
-                                                        "",
-                                                        "",
-                                                        ""
-                                                )
-                                                editor.putInt("vendorLoggedIn", 1)
-                                                editor.commit()
-                                                editor.apply()
-                                                val intent = Intent(
-                                                        this,
-                                                        SignInWithSocialAdditionalVendorData::class.java
-                                                )
-                                                intent.putExtra(
-                                                        SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
-                                                        currentVendor
-                                                )
-                                                startActivity(intent)
-                                            }
+                        val request = GraphRequest.newMeRequest(token) { `object`, response ->
+                            try {
+                                //here is the data that you want
+                                Log.d("FBLOGIN_JSON_RES", `object`.toString())
+
+                                if (`object`.has("id")) {
+                                    val nameArray = user?.displayName?.split(" ")
+                                    val firstName = nameArray?.get(0)
+                                    val lastname = nameArray?.get(1)
+                                    val email = user?.email
+                                    val photoUrl = user?.photoUrl.toString()
+                                    if (userSignin) {
+                                        if (firstName != null && lastname != null && email != null) {
+                                            val currentUser = User(
+                                                    firstName,
+                                                    lastname,
+                                                    email,
+                                                    photoUrl,
+                                                    "",
+                                                    "",
+                                                    "",
+                                                    ""
+                                            )
+                                            editor.putInt("userLoggedIn", 1)
+                                            editor.commit()
+                                            editor.apply()
+                                            val intent = Intent(
+                                                    this,
+                                                    SignInWithGoogleAdditionalDetails::class.java
+                                            )
+                                            intent.putExtra(
+                                                    SignInWithGoogleAdditionalDetails.USER_OBJ,
+                                                    currentUser
+                                            )
+                                            startActivity(intent)
                                         }
-
                                     } else {
-                                        Log.e("FBLOGIN_FAILD", `object`.toString())
+                                        if (firstName != null && lastname != null && email != null) {
+                                            val currentVendor = Vendor(
+                                                    firstName,
+                                                    lastname,
+                                                    email,
+                                                    "",
+                                                    "",
+                                                    "",
+                                                    ""
+                                            )
+                                            editor.putInt("vendorLoggedIn", 1)
+                                            editor.commit()
+                                            editor.apply()
+                                            val intent = Intent(
+                                                    this,
+                                                    SignInWithSocialAdditionalVendorData::class.java
+                                            )
+                                            intent.putExtra(
+                                                    SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
+                                                    currentVendor
+                                            )
+                                            startActivity(intent)
+                                        }
                                     }
 
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-
+                                } else {
+                                    Log.e("FBLOGIN_FAILD", `object`.toString())
                                 }
+
+
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+
                             }
 
 
-                            val parameters = Bundle()
-                            parameters.putString("fields", "name,email,id,picture.type(large)")
-                            request.parameters = parameters
-                            request.executeAsync()
+
+                        }
+                        val parameters = Bundle()
+                        parameters.putString("fields", "name,email,id,picture.type(large)")
+                        request.parameters = parameters
+                        request.executeAsync()
+
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -263,6 +270,7 @@ class LoginActivity : AppCompatActivity() {
 
                     }
                 }
+
     }
 
     private fun signInWithGoogle() {
@@ -328,7 +336,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     else {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentVendor = Vendor(firstName, lastname, email, "", "", "")
+                            val currentVendor = Vendor(firstName, lastname, email, "", "", "","")
                             editor.putInt("vendorLoggedIn", 1)
                             editor.commit()
                             editor.apply()
