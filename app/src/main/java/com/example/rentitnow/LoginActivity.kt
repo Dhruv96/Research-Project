@@ -3,6 +3,7 @@ package com.example.rentitnow
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +23,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 
@@ -29,12 +31,12 @@ import java.util.*
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var callbackManager: CallbackManager
-
-
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private val RC_SIGN_IN = 100
     var userSignin = true
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,20 +47,19 @@ class LoginActivity : AppCompatActivity() {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
-
+        sharedPreferences = getSharedPreferences("logged_in", MODE_PRIVATE)
+        editor = sharedPreferences.edit()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
+        //googleSignInClient.signOut()
 
         login_button.setOnClickListener(View.OnClickListener {
-
             displayPopup(null, login_button)
             Log.v("tag", "1")
         })
 
         googlesigninBtn.setOnClickListener(View.OnClickListener {
-
             displayPopup(googlesigninBtn, null)
         })
 
@@ -67,8 +68,7 @@ class LoginActivity : AppCompatActivity() {
         })
 
         loginButton.setOnClickListener(View.OnClickListener {
-
-            loginAction()
+            loginBtnAction()
         })
 
 
@@ -94,53 +94,29 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-    private fun loginAction() {
-
-
+    private fun loginBtnAction() {
         //Check for empty fields and then login
         if (emailEditText.getText().toString() == "") {
             Toast.makeText(this, "Please enter email address.", Toast.LENGTH_SHORT).show()
-//        } else if (isEmailValid(emailEditText.getText().toString()))
-//            {
-//            Toast.makeText(this, "Please enter a valid email.", Toast.LENGTH_SHORT).show()
+
         } else if (passwordEditText.getText().toString() == "") {
             Toast.makeText(this, "Please enter password.", Toast.LENGTH_SHORT).show()
         } else {
-
-            checkInFirebase()
-
+            checkFromFirebase()
         }
     }
 
-    fun isEmailValid(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private fun checkInFirebase() {
-
-        //Start HUD
-
-//        hud.show()
+    private fun checkFromFirebase() {
 
         //Firebase authentication
         auth.signInWithEmailAndPassword(
-                emailEditText.getText().toString(),
-                passwordEditText.getText().toString()
+                emailEditText.text.toString(),
+                passwordEditText.text.toString()
         )
             .addOnCompleteListener(this,
                     OnCompleteListener<AuthResult?> { task ->
                         if (task.isSuccessful) {
-
-                            try {
-                                val preferences = getSharedPreferences("users", MODE_PRIVATE)
-//                                val pref = applicationContext.getSharedPreferences("users", 0) // 0 - for private mode
-                                preferences.edit().putBoolean("LOGGEDIN", true).apply()
-
-                                startActivity(Intent(this, NavigationActivity::class.java))
-                            } catch (ex: java.lang.Exception) {
-                                Toast.makeText(this, "Error occured!!", Toast.LENGTH_SHORT).show()
-                            }
-
+                            checkUserInDB()
                         } else {
                             // If sign in fails, display a message to the user.
 //                        hud.dismiss()
@@ -153,6 +129,35 @@ class LoginActivity : AppCompatActivity() {
                     })
     }
 
+    private fun checkUserInDB() {
+        var database = FirebaseDatabase.getInstance()
+
+        var user = auth.currentUser
+        if (user != null) {
+            database.getReference("users").child(user.uid).get().addOnSuccessListener {
+                if(it.exists()) {
+                    editor.putInt("userLoggedIn", 1)
+                    editor.commit()
+                    editor.apply()
+                    startActivity(Intent(this, NavigationActivityUser::class.java))
+                }
+                else {
+                    database.getReference("vendors").child(user.uid).get().addOnSuccessListener {
+                        if (it.exists()) {
+                            editor.putInt("vendorLoggedIn", 1)
+                            editor.commit()
+                            editor.apply()
+                            startActivity(Intent(this, NavigationActivityVendor::class.java))
+                        }
+                        else {
+                            Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun signInWithFacebook() {
         Log.v("tag", "3")
@@ -161,9 +166,8 @@ class LoginActivity : AppCompatActivity() {
                 this,
                 Arrays.asList("user_photos", "email", "user_birthday", "public_profile")
         )
-
-
     }
+
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
@@ -199,6 +203,9 @@ class LoginActivity : AppCompatActivity() {
                                                     "",
                                                     ""
                                             )
+                                            editor.putInt("userLoggedIn", 1)
+                                            editor.commit()
+                                            editor.apply()
                                             val intent = Intent(
                                                     this,
                                                     SignInWithGoogleAdditionalDetails::class.java
@@ -220,6 +227,9 @@ class LoginActivity : AppCompatActivity() {
                                                     "",
                                                     ""
                                             )
+                                            editor.putInt("vendorLoggedIn", 1)
+                                            editor.commit()
+                                            editor.apply()
                                             val intent = Intent(
                                                     this,
                                                     SignInWithSocialAdditionalVendorData::class.java
@@ -257,9 +267,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
     }
-
-
-
 
     private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -314,6 +321,9 @@ class LoginActivity : AppCompatActivity() {
                                     "",
                                     ""
                             )
+                            editor.putInt("userLoggedIn", 1)
+                            editor.commit()
+                            editor.apply()
                             val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
                             intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
                             startActivity(intent)
@@ -322,6 +332,9 @@ class LoginActivity : AppCompatActivity() {
                     else {
                         if(firstName != null && lastname != null && email != null ) {
                             val currentVendor = Vendor(firstName, lastname, email, "", "", "")
+                            editor.putInt("vendorLoggedIn", 1)
+                            editor.commit()
+                            editor.apply()
                             val intent = Intent(
                                     this,
                                     SignInWithSocialAdditionalVendorData::class.java

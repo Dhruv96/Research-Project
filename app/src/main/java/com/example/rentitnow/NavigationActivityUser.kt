@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.nav_header.*
 
-class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var databaseRef : DatabaseReference

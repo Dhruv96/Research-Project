@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RentItNow">
-        <activity android:name=".NavigationActivity"></activity>
+        <activity android:name=".NavigationActivityVendor"></activity>
+        <activity android:name=".NavigationActivityUser" />
         <activity android:name=".SignInWithSocialAdditionalVendorData" />
         <activity android:name=".SignInWithGoogleAdditionalDetails" />
         <activity android:name=".VendorCarsActivity" />
