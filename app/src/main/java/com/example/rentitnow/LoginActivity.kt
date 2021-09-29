@@ -225,6 +225,7 @@ class LoginActivity : AppCompatActivity() {
                                                     email,
                                                     "",
                                                     "",
+                                                    "",
                                                     ""
                                             )
                                             editor.putInt("vendorLoggedIn", 1)
@@ -331,7 +332,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     else {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentVendor = Vendor(firstName, lastname, email, "", "", "")
+                            val currentVendor = Vendor(firstName, lastname, email, "", "", "","")
                             editor.putInt("vendorLoggedIn", 1)
                             editor.commit()
                             editor.apply()
