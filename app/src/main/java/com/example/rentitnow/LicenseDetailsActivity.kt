@@ -12,8 +12,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_license_details.*
-import kotlinx.android.synthetic.main.fragment_user_tab.*
-import java.sql.DriverManager.println
 
 
 class LicenseDetailsActivity : AppCompatActivity() {
@@ -64,7 +62,7 @@ class LicenseDetailsActivity : AppCompatActivity() {
                             println(user)
                             // Adding user to database
                             databaseRef.child("users").child(auth.currentUser!!.uid).setValue(user)
-                            val intent = Intent(this, NavigationActivity::class.java)
+                            val intent = Intent(this, NavigationActivityUser::class.java)
                             startActivity(intent)
                         }
 
