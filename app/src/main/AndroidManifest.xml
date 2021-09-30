@@ -16,7 +16,6 @@
         <activity android:name=".NavigationActivityUser" />
         <activity android:name=".SignInWithSocialAdditionalVendorData" />
         <activity android:name=".SignInWithGoogleAdditionalDetails" />
-        <activity android:name=".VendorCarsActivity" />
         <activity android:name=".LicenseDetailsActivity" />
         <activity android:name=".UserHomeActivity" />
         <activity android:name=".SignupActivity" />

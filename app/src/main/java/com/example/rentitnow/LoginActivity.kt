@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-        //googleSignInClient.signOut()
+        googleSignInClient.signOut()
 
         FBlogin_button.setOnClickListener(View.OnClickListener {
             displayPopup(null, FBlogin_button)
@@ -205,15 +205,8 @@ class LoginActivity : AppCompatActivity() {
                                             editor.putInt("userLoggedIn", 1)
                                             editor.commit()
                                             editor.apply()
-                                            val intent = Intent(
-                                                    this,
-                                                    SignInWithGoogleAdditionalDetails::class.java
-                                            )
-                                            intent.putExtra(
-                                                    SignInWithGoogleAdditionalDetails.USER_OBJ,
-                                                    currentUser
-                                            )
-                                            startActivity(intent)
+                                            val currentUserId = auth.currentUser?.uid!!
+                                            checkIfUserExists(currentUserId, currentUser)
                                         }
                                     } else {
                                         if (firstName != null && lastname != null && email != null) {
@@ -224,20 +217,12 @@ class LoginActivity : AppCompatActivity() {
                                                     "",
                                                     "",
                                                     "",
-                                                    ""
+                                                    photoUrl
                                             )
                                             editor.putInt("vendorLoggedIn", 1)
                                             editor.commit()
                                             editor.apply()
-                                            val intent = Intent(
-                                                    this,
-                                                    SignInWithSocialAdditionalVendorData::class.java
-                                            )
-                                            intent.putExtra(
-                                                    SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
-                                                    currentVendor
-                                            )
-                                            startActivity(intent)
+                                            checkIfVendorExists(auth.currentUser?.uid!!, currentVendor)
                                         }
                                     }
 
@@ -329,26 +314,16 @@ class LoginActivity : AppCompatActivity() {
                             editor.putInt("userLoggedIn", 1)
                             editor.commit()
                             editor.apply()
-                            val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
-                            intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
-                            startActivity(intent)
+                            checkIfUserExists(auth.currentUser?.uid!!, currentUser)
                         }
                     }
                     else {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentVendor = Vendor(firstName, lastname, email, "", "", "","")
+                            val currentVendor = Vendor(firstName, lastname, email, "", "", "",photoUrl)
                             editor.putInt("vendorLoggedIn", 1)
                             editor.commit()
                             editor.apply()
-                            val intent = Intent(
-                                    this,
-                                    SignInWithSocialAdditionalVendorData::class.java
-                            )
-                            intent.putExtra(
-                                    SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
-                                    currentVendor
-                            )
-                            startActivity(intent)
+                            checkIfVendorExists(auth.currentUser?.uid!!, currentVendor)
                         }
                     }
 
@@ -395,6 +370,45 @@ class LoginActivity : AppCompatActivity() {
             true
         })
         popupMenu.show()
+    }
+
+    private fun checkIfUserExists(userId: String, currentUser: User){
+        val database = FirebaseDatabase.getInstance()
+        database.getReference().child("users").child(userId).get().addOnSuccessListener {
+            if(it.exists()) {
+                val intent = Intent(this, NavigationActivityUser::class.java)
+                startActivity(intent)
+            }
+            else {
+                val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
+                intent.putExtra(SignInWithGoogleAdditionalDetails.USER_OBJ, currentUser)
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun checkIfVendorExists(vendorId: String, currentVendor: Vendor) {
+        val database = FirebaseDatabase.getInstance()
+        database.getReference().child("vendors").child(vendorId).get().addOnSuccessListener {
+            if(it.exists()) {
+                val intent = Intent(
+                        this,
+                        NavigationActivityVendor::class.java
+                )
+                startActivity(intent)
+            }
+            else {
+                val intent = Intent(
+                        this,
+                        SignInWithSocialAdditionalVendorData::class.java
+                )
+                intent.putExtra(
+                        SignInWithSocialAdditionalVendorData.VENDOR_OBJ,
+                        currentVendor
+                )
+                startActivity(intent)
+            }
+        }
     }
     }
 
