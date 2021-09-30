@@ -35,7 +35,7 @@ class SignInWithSocialAdditionalVendorData : AppCompatActivity() {
                 vendor.address=address
                 vendor.city=city
                 databaseRef.child("vendors").child(auth.currentUser!!.uid).setValue(vendor)
-                val intent = Intent(this, VendorCarsActivity::class.java)
+                val intent = Intent(this, NavigationActivityVendor::class.java)
                 startActivity(intent)
 
             }
