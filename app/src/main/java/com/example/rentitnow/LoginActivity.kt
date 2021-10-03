@@ -136,7 +136,7 @@ class LoginActivity : AppCompatActivity() {
         if (user != null) {
             database.getReference("users").child(user.uid).get().addOnSuccessListener {
                 if(it.exists()) {
-                    editor.putInt("userLoggedIn", 1)
+                    editor.putInt("userLoggedIn", 0)
                     editor.commit()
                     editor.apply()
                     startActivity(Intent(this, NavigationActivityUser::class.java))
@@ -144,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
                 else {
                     database.getReference("vendors").child(user.uid).get().addOnSuccessListener {
                         if (it.exists()) {
-                            editor.putInt("vendorLoggedIn", 1)
+                            editor.putInt("vendorLoggedIn", 0)
                             editor.commit()
                             editor.apply()
                             startActivity(Intent(this, NavigationActivityVendor::class.java))
@@ -311,7 +311,7 @@ class LoginActivity : AppCompatActivity() {
                                     "",
                                     ""
                             )
-                            editor.putInt("userLoggedIn", 1)
+                            editor.putInt("userLoggedIn", 2)
                             editor.commit()
                             editor.apply()
                             checkIfUserExists(auth.currentUser?.uid!!, currentUser)
@@ -320,7 +320,7 @@ class LoginActivity : AppCompatActivity() {
                     else {
                         if(firstName != null && lastname != null && email != null ) {
                             val currentVendor = Vendor(firstName, lastname, email, "", "", "",photoUrl)
-                            editor.putInt("vendorLoggedIn", 1)
+                            editor.putInt("vendorLoggedIn", 2)
                             editor.commit()
                             editor.apply()
                             checkIfVendorExists(auth.currentUser?.uid!!, currentVendor)
