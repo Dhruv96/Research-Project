@@ -20,7 +20,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.nav_header.*
 
 class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -38,12 +39,14 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         var navigationView: NavigationView=findViewById(R.id.nav_view)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolbar)
-        val toggle = ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
         auth = FirebaseAuth.getInstance()
 
+        //Call shared  pref to get data profile
+        pref = applicationContext.getSharedPreferences("logged_in", 0)
         databaseRef=FirebaseDatabase.getInstance().getReference("users")
         val user = auth.currentUser
         val id=user?.uid
@@ -98,7 +101,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
             R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserProfileFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
 
-            R.id.nav_logout -> signOut(pref.getInt("loginType", 0))
+            R.id.nav_logout -> signOut(pref.getInt("userLoggedIn", 0))
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -109,19 +112,19 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
     //Handle logout
     fun signOut(loginType: Int) {
         when (loginType) {
-            0 -> {
+            0,1 -> {
                 FirebaseAuth.getInstance().signOut()
-                val pref = applicationContext.getSharedPreferences("MyPref", 0) // 0 - for private mode
+                val pref = applicationContext.getSharedPreferences("logged_in", 0) // 0 - for private mode
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
                 Toast.makeText(this, "Successfully signed out.", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, LoginActivity::class.java))
             }
-            1 -> {
+            2 -> {
                 googleSignInClient.signOut()
                         .addOnCompleteListener(this, OnCompleteListener<Void?> { // ...
-                            val pref = applicationContext.getSharedPreferences("MyPref", 0) // 0 - for private mode
+                            val pref = applicationContext.getSharedPreferences("logged_in", 0) // 0 - for private mode
                             val editor = pref.edit()
                             editor.clear()
                             editor.apply()
@@ -129,14 +132,11 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
                             startActivity(Intent(this, LoginActivity::class.java))
                         })
             }
-            2 -> {
+            3 -> {
             }
             else -> startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
-    fun onFragmentInteraction() {
-        pref = applicationContext.getSharedPreferences("users", 0) // 0 - for private mode
-        nameViewProfile.setText(pref.getString("fname", ""))
-    }
+
 }

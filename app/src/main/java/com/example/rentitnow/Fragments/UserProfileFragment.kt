@@ -38,10 +38,17 @@ class UserProfileFragment : Fragment() {
                 val firstname=it.child("fname").value
                 val lastname=it.child("lname").value
                 val email=it.child("email").value
+                val gender=it.child("gender").value
                 val photoURL=it.child("profileImgUrl").value
                 editTextFirstName.setText(firstname.toString())
                 editTextLastName.setText(lastname.toString())
                 editTextEmail.setText(email.toString())
+                if (gender.toString()=="Male"){
+                    maleRdb.setChecked(true)
+                    Log.d("gender", "gender passed")
+                }else{
+                    femaleRdb.setChecked(true)
+                }
 
                 Glide.with(activity).load(photoURL).into(SelectUserImage)
 

@@ -80,6 +80,39 @@
         app:layout_constraintStart_toEndOf="@+id/textViewEmail"
         app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
 
+    <TextView
+        android:id="@+id/textViewGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/gender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
+
+    <RadioGroup
+        android:id="@+id/genderRadioGrp"
+        android:layout_width="190dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewGender"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail">
+
+        <RadioButton
+            android:id="@+id/maleRdb"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:text="@string/male" />
+
+        <RadioButton
+            android:id="@+id/femaleRdb"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:text="@string/female" />
+    </RadioGroup>
+
 
 
     <Button
@@ -91,7 +124,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/genderRadioGrp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
