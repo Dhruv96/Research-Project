@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserTabFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Navigation.VendorProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:id="@+id/SelectUserImage"
         android:layout_width="80dp"
@@ -83,96 +82,15 @@
 
 
 
-    <TextView
-        android:id="@+id/textViewPswd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="@string/password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
-
-    <EditText
-        android:id="@+id/editTextPasswordSignup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toEndOf="@+id/textViewPhn"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
-
-    <TextView
-        android:id="@+id/textViewDOB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="@string/dob"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPswd" />
-
-    <EditText
-        android:id="@+id/editTextDOB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.429"
-        app:layout_constraintStart_toEndOf="@+id/textViewDOB"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordSignup" />
-
-
-
-    <TextView
-        android:id="@+id/textViewGender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
-        android:text="@string/gender"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDOB" />
-
-    <RadioGroup
-        android:id="@+id/genderRadioGrp"
-        android:layout_width="190dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewGender"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDOB">
-
-        <RadioButton
-            android:id="@+id/maleRdb"
-            android:layout_width="95dp"
-            android:layout_height="wrap_content"
-            android:text="@string/male" />
-
-        <RadioButton
-            android:id="@+id/femaleRdb"
-            android:layout_width="95dp"
-            android:layout_height="wrap_content"
-            android:text="@string/female" />
-    </RadioGroup>
-
     <Button
-        android:id="@+id/continue_btn_vendor"
+        android:id="@+id/update_btn_User"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="Sign Up"
+        android:text="Update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/genderRadioGrp" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

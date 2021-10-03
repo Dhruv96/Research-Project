@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.rentitnow.Navigation.UserHomeFragment
+import com.example.rentitnow.Navigation.VendorProfileFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -94,7 +95,7 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
-            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, VendorProfileFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
 
             R.id.nav_logout -> signOut(pref.getInt("loginType", 0))
