@@ -140,6 +140,7 @@ class UserTabFragment : Fragment() {
             }
         })
     }
+
     private fun selectImageFromGallery() = selectImageFromGalleryResult.launch("image/*")
 
 }
