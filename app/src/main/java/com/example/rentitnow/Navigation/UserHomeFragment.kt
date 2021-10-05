@@ -1,33 +1,26 @@
 package com.example.rentitnow.Navigation
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.rentitnow.CarsListActivity
+import com.example.rentitnow.Helpers.Companion.transformIntoDatePicker
+import com.example.rentitnow.Helpers.Companion.transformIntoDatePickerWithMinDate
 import com.example.rentitnow.R
+import kotlinx.android.synthetic.main.fragment_user_home.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [UserHomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UserHomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -38,23 +31,54 @@ class UserHomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_user_home, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UserHomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserHomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        editTextPickupDate.transformIntoDatePickerWithMinDate(requireContext(), "dd-MMM-yyyy")
+        editTextReturnDate.transformIntoDatePickerWithMinDate(requireContext(), "dd-MMM-yyyy")
+
+
+
+
+        buttonConfirmPickUp.setOnClickListener(View.OnClickListener {
+            val pickupdate = editTextPickupDate.text.toString()
+            val returndate = editTextReturnDate.text.toString()
+            if (pickupdate.isEmpty() || returndate.isEmpty()) {
+                Toast.makeText(
+                    activity,
+                    "Please select pickup and return dates",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+
+                try {
+                    val datepickup: Date
+                    val dateReturn: Date
+                    val dates = SimpleDateFormat("MM/dd/yyyy")
+                    datepickup = dates.parse(pickupdate)
+                    dateReturn = dates.parse(returndate)
+                    val difference = datepickup.time - dateReturn.time
+                    if (difference > 0) {
+                        Toast.makeText(
+                            activity,
+                            "Please select a valid return date!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        val intent = Intent(activity, CarsListActivity::class.java)
+                        intent.putExtra("pickupDate", pickupdate)
+                        intent.putExtra("endDate", returndate)
+                        startActivity(intent)
+                    }
+                } catch (exception: Exception) {
+                    Toast.makeText(view.context, "Unable to find difference", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
+
+        })
+
+
     }
+
+
 }

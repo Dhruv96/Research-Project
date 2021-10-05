@@ -35,7 +35,7 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_vendor)
-        drawerLayout=findViewById(R.id.drawer_layout)
+        drawerLayout=findViewById(R.id.drawer_layout_user)
         var navigationView: NavigationView=findViewById(R.id.nav_view_vendor)
         val toolbar = findViewById<Toolbar>(R.id.toolBarVendor)
         setSupportActionBar(toolbar)
@@ -45,6 +45,7 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
         navigationView.setNavigationItemSelectedListener(this)
         auth = FirebaseAuth.getInstance()
 
+        pref = applicationContext.getSharedPreferences("logged_in", 0)
         databaseRef=FirebaseDatabase.getInstance().getReference("vendors")
         val user = auth.currentUser
         val id=user?.uid
@@ -64,23 +65,10 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
 
 
 
-
-//
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, VendorHomeFragment()).commit()
-//            navigationView.setCheckedItem(R.id.nav_home)
-//        }
-
-        // Configure sign-in to request the user's ID, email address, and basic profile.
-
-        // Configure sign-in to request the user's ID, email address, and basic profile.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
 
-        // Build a GoogleSignInClient with the options specified by gso.
-
-        // Build a GoogleSignInClient with the options specified by gso.
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
@@ -98,7 +86,7 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
             R.id.nav_home_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
             R.id.nav_profile_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, VendorProfileFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
-            R.id.nav_logout -> signOut(pref.getInt("loginType", 0))
+            R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
             R.id.publish -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PublishCarFragment()).commit()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -107,37 +95,33 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
 
 
 
-    //Handle logout
-    fun signOut(loginType: Int) {
+
+    fun logout(loginType: Int) {
         when (loginType) {
-            0 -> {
+            0, 1 -> {
                 FirebaseAuth.getInstance().signOut()
-                val pref = applicationContext.getSharedPreferences("MyPref", 0) // 0 - for private mode
+                val pref = applicationContext.getSharedPreferences("logged_in", 0)
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
                 Toast.makeText(this, "Successfully signed out.", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, LoginActivity::class.java))
             }
-            1 -> {
+            2 -> {
                 googleSignInClient.signOut()
                     .addOnCompleteListener(this, OnCompleteListener<Void?> { // ...
-                        val pref = applicationContext.getSharedPreferences("MyPref", 0) // 0 - for private mode
+                        val pref = applicationContext.getSharedPreferences("logged_in", 0)
                         val editor = pref.edit()
                         editor.clear()
                         editor.apply()
-                        Toast.makeText(this, "Successfull signed out.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Successfully signed out.", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, LoginActivity::class.java))
                     })
             }
-            2 -> {
+            3 -> {
             }
             else -> startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
-    fun onFragmentInteraction() {
-        pref = applicationContext.getSharedPreferences("users", 0) // 0 - for private mode
-        nameViewProfile.setText(pref.getString("fname", ""))
-    }
 }

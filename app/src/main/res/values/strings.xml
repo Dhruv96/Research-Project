@@ -53,4 +53,8 @@
     <string name="publish">Publish</string>
     <string name="model">Model</string>
     <string name="manufacture">Manufacture</string>
+    <string name="bookridetext">Pick the Data and Location</string>
+    <string name="pickup_loc">Pick Up Location</string>
+    <string name="pickup_date">Pick Up Date</string>
+    <string name="return_date">Return Date</string>
 </resources>

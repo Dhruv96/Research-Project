@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.fragment_user_home.*
 import kotlinx.android.synthetic.main.nav_header.*
 
 class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -35,7 +38,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_home)
-        drawerLayout=findViewById(R.id.drawer_layout)
+        drawerLayout=findViewById(R.id.drawer_layout_user)
         var navigationView: NavigationView=findViewById(R.id.nav_view)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolbar)
@@ -63,10 +66,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         }.addOnFailureListener {
             Log.e("FBLOGIN_FAILD", "error retriving data")
         }
-
-
-
-
+        
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
@@ -90,7 +90,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            //super.onBackPressed();
+
             Toast.makeText(this, "No further back allowed.", Toast.LENGTH_SHORT).show()
         }
     }
@@ -101,7 +101,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
             R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserProfileFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
 
-            R.id.nav_logout -> signOut(pref.getInt("userLoggedIn", 0))
+            R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -109,12 +109,11 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
 
 
 
-    //Handle logout
-    fun signOut(loginType: Int) {
+    fun logout(loginType: Int) {
         when (loginType) {
-            0,1 -> {
+            0, 1 -> {
                 FirebaseAuth.getInstance().signOut()
-                val pref = applicationContext.getSharedPreferences("logged_in", 0) // 0 - for private mode
+                val pref = applicationContext.getSharedPreferences("logged_in", 0)
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
@@ -124,11 +123,11 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
             2 -> {
                 googleSignInClient.signOut()
                         .addOnCompleteListener(this, OnCompleteListener<Void?> { // ...
-                            val pref = applicationContext.getSharedPreferences("logged_in", 0) // 0 - for private mode
+                            val pref = applicationContext.getSharedPreferences("logged_in", 0)
                             val editor = pref.edit()
                             editor.clear()
                             editor.apply()
-                            Toast.makeText(this, "Successfull signed out.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Successfully signed out.", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, LoginActivity::class.java))
                         })
             }
