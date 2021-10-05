@@ -51,7 +51,7 @@ class Helpers {
 
             val myCalendar = Calendar.getInstance()
             val datePickerOnDataSetListener =
-                DatePickerDialog.OnDateSetListener { datepicker, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     myCalendar.set(Calendar.YEAR, year)
                     myCalendar.set(Calendar.MONTH, monthOfYear)
                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -67,11 +67,12 @@ class Helpers {
                     myCalendar.get(Calendar.DAY_OF_MONTH)
                 ).run {
                     maxDate?.time?.also { datePicker.maxDate = it }
-                    minDate?.time?.also { datePicker.minDate = myCalendar.timeInMillis }
+                    minDate?.time.also { datePicker.minDate = Date().time  }
                     show()
                 }
             }
         }
+
     }
 
 
