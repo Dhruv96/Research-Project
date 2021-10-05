@@ -36,9 +36,6 @@ class UserHomeFragment : Fragment() {
         editTextPickupDate.transformIntoDatePickerWithMinDate(requireContext(), "dd-MMM-yyyy")
         editTextReturnDate.transformIntoDatePickerWithMinDate(requireContext(), "dd-MMM-yyyy")
 
-
-
-
         buttonConfirmPickUp.setOnClickListener(View.OnClickListener {
             val pickupdate = editTextPickupDate.text.toString()
             val returndate = editTextReturnDate.text.toString()

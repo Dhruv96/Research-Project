@@ -74,25 +74,30 @@ class PublishCarFragment : Fragment() {
         }
 
         nextButton.setOnClickListener{
-            if(position < images!!.size - 1) {
-                position++
-                carsImageSwitcher.setImageURI(images!![position])
+            if(images!!.size > 0) {
+                if(position < images!!.size - 1) {
+                    position++
+                    carsImageSwitcher.setImageURI(images!![position])
+                }
+                else {
+                    position = 0
+                    carsImageSwitcher.setImageURI(images!![position])
+                }
             }
-            else {
-                position = 0
-                carsImageSwitcher.setImageURI(images!![position])
-            }
+
 
         }
 
         prevButton.setOnClickListener{
-            if(position > 0) {
-                position--
-                carsImageSwitcher.setImageURI(images!![position])
-            }
-            else {
-                position = images!!.size - 1
-                carsImageSwitcher.setImageURI(images!![position])
+            if(images!!.size > 0)  {
+                if(position > 0) {
+                    position--
+                    carsImageSwitcher.setImageURI(images!![position])
+                }
+                else {
+                    position = images!!.size - 1
+                    carsImageSwitcher.setImageURI(images!![position])
+                }
             }
 
         }

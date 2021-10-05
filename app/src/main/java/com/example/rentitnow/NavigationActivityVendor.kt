@@ -35,7 +35,7 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_vendor)
-        drawerLayout=findViewById(R.id.drawer_layout_user)
+        drawerLayout=findViewById(R.id.drawer_layout_vendor)
         var navigationView: NavigationView=findViewById(R.id.nav_view_vendor)
         val toolbar = findViewById<Toolbar>(R.id.toolBarVendor)
         setSupportActionBar(toolbar)
