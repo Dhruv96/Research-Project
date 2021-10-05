@@ -47,4 +47,10 @@
     <string name="fb_login_protocol_scheme">fb925481281659139</string>
     <string name="cont_as_user">Continue as user</string>
     <string name="cont_as_vendor">Continue as Vendor</string>
+    <string name="item_type">Item Type</string>
+    <string name="cost_per_day">Cost per Day</string>
+    <string name="color">Colour</string>
+    <string name="publish">Publish</string>
+    <string name="model">Model</string>
+    <string name="manufacture">Manufacture</string>
 </resources>

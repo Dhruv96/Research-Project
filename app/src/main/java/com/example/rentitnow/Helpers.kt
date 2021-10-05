@@ -25,15 +25,16 @@ class Helpers {
 
             setOnClickListener {
                 DatePickerDialog(
-                    context, datePickerOnDataSetListener, myCalendar
+                        context, datePickerOnDataSetListener, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)
+                        myCalendar.get(Calendar.DAY_OF_MONTH)
                 ).run {
                     maxDate?.time?.also { datePicker.maxDate = it }
                     show()
                 }
             }
         }
+
     }
 
 }
