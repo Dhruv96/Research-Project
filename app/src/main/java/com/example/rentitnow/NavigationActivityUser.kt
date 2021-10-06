@@ -1,5 +1,19 @@
 package com.example.rentitnow
 
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
 import com.example.rentitnow.Fragments.PublishCarFragment
 import com.example.rentitnow.Fragments.UserProfileFragment
 import com.example.rentitnow.Navigation.UserHomeFragment
@@ -38,7 +52,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
         if(savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
         auth = FirebaseAuth.getInstance()
@@ -85,9 +99,9 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
 
-            R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
-            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserProfileFragment()).commit()
-            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
+            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserProfileFragment()).commit()
+            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
             R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
         }
         drawerLayout.closeDrawer(GravityCompat.START)
