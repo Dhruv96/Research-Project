@@ -83,11 +83,11 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.nav_home_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
-            R.id.nav_profile_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, VendorProfileFragment()).commit()
-            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            R.id.nav_home_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
+            R.id.nav_profile_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, VendorProfileFragment()).commit()
+            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
             R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
-            R.id.publish -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PublishCarFragment()).commit()
+            R.id.publish -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, PublishCarFragment()).commit()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true

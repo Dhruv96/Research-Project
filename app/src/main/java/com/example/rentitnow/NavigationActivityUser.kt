@@ -11,10 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.rentitnow.Fragments.PublishCarFragment
+import com.example.rentitnow.Fragments.UserProfileFragment
 import com.example.rentitnow.Navigation.UserHomeFragment
-import com.example.rentitnow.Navigation.VendorProfileFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -39,7 +39,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         var navigationView: NavigationView=findViewById(R.id.nav_view)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolbar)
-        val toggle = ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
@@ -71,7 +71,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
-
+    
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -83,9 +83,9 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
-            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, VendorProfileFragment()).commit()
-            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
+            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserProfileFragment()).commit()
+            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
             R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
         }
         drawerLayout.closeDrawer(GravityCompat.START)
