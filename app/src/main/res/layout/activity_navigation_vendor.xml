@@ -24,7 +24,8 @@
             app:popupTheme="@style/Theme.AppCompat.Light" />
 
         <FrameLayout
-            android:id="@+id/fragment_container_user"
+
+            android:id="@+id/fragment_container_vendor"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

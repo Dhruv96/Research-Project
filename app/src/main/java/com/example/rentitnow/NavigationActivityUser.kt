@@ -1,18 +1,6 @@
 package com.example.rentitnow
 
-import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+import com.example.rentitnow.Fragments.PublishCarFragment
 import com.example.rentitnow.Fragments.UserProfileFragment
 import com.example.rentitnow.Navigation.UserHomeFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -38,17 +26,28 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         drawerLayout=findViewById(R.id.drawer_layout)
         var navigationView: NavigationView=findViewById(R.id.nav_view)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
+        val navHeader = navigationView.getHeaderView(0)
+
+        val nameViewProfile = navHeader.findViewById<TextView>(R.id.nameViewProfile)
+        val emailViewProfile = navHeader.findViewById<TextView>(R.id.emailViewProfile)
+        val userimageView = navHeader.findViewById<ImageView>(R.id.userimageView)
+
         setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
+        if(savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            navigationView.setCheckedItem(R.id.nav_home)
+        }
         auth = FirebaseAuth.getInstance()
 
         pref = applicationContext.getSharedPreferences("logged_in", 0)
         databaseRef=FirebaseDatabase.getInstance().getReference("users")
         val user = auth.currentUser
         val id=user?.uid
+
         databaseRef.child(id.toString()).get().addOnSuccessListener {
             if (it.exists()){
                 val firstname=it.child("fname").value
@@ -57,12 +56,10 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
                 nameViewProfile.setText(firstname.toString())
                 emailViewProfile.setText(email.toString())
                 Glide.with(this).load(photoURL).into(userimageView)
-
             }
         }.addOnFailureListener {
             Log.e("FBLOGIN_FAILD", "error retriving data")
         }
-
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -70,6 +67,10 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
                 .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+
+
+
     }
     
     override fun onBackPressed() {
@@ -83,9 +84,10 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
-            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserProfileFragment()).commit()
-            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_user, UserHomeFragment()).commit()
+
+            R.id.nav_home -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
+            R.id.nav_profile -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserProfileFragment()).commit()
+            R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container, UserHomeFragment()).commit()
             R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
         }
         drawerLayout.closeDrawer(GravityCompat.START)
