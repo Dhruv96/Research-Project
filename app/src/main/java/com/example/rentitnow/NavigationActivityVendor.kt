@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.example.rentitnow.Fragments.PublishCarFragment
+import com.example.rentitnow.Fragments.PublishedVehiclesFragment
 import com.example.rentitnow.Navigation.UserHomeFragment
 import com.example.rentitnow.Navigation.VendorProfileFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -101,6 +102,7 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
             R.id.nav_profile_vendor -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_vendor, VendorProfileFragment()).commit()
             R.id.nav_history -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_vendor, UserHomeFragment()).commit()
             R.id.nav_logout -> logout(pref.getInt("userLoggedIn", 0))
+            R.id.published_vehicles -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_vendor, PublishedVehiclesFragment()).commit()
             R.id.publish -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container_vendor, PublishCarFragment()).commit()
         }
         drawerLayout.closeDrawer(GravityCompat.START)

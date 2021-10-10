@@ -64,9 +64,14 @@ class PublishCarFragment : Fragment() {
         }
         carsImageSwitcher.setImageResource(R.drawable.addphoto)
         val vehicleTypes = listOf(VehicleType.CAR.type, VehicleType.TRUCK.type)
+        val fuelTypes = listOf(FuelType.PETROL.type, FuelType.DIESEL.type)
+        val transmissionTypes = listOf(TransmissionType.AUTOMATIC.type, TransmissionType.MANUAL.type)
         val adapter = ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item, vehicleTypes)
+        val adapter2 = ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item, fuelTypes)
+        val adapter3 = ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item, transmissionTypes)
         spinnerItemType.adapter = adapter
-
+        spinnerFuelType.adapter = adapter2
+        spinnerTransmissionType.adapter = adapter3
         images = ArrayList()
 
         carsImageSwitcher.setOnClickListener {
@@ -103,7 +108,7 @@ class PublishCarFragment : Fragment() {
         }
 
        publishButton.setOnClickListener{
-           if(editTextColour.text.toString() != "" && editTextCostPerday.text.toString() != "" && editTextModel.text.toString() != "" && editTextManufacture.text.toString() != "" ) {
+           if(editTextDescription.text.toString() != "" && editTextCostPerday.text.toString() != "" && editTextModel.text.toString() != "" && editTextManufacture.text.toString() != "" && images!!.size > 0 ) {
                progressDialog.show()
                for(i in 0 until images!!.size) {
                    val ref = storage.child("vehicleImages").child(images!![i]?.lastPathSegment!!)
@@ -125,7 +130,8 @@ class PublishCarFragment : Fragment() {
                            if (uploadedImageDownloadUrls.size == images!!.size) {
                                val vehicleType = spinnerItemType.selectedItem.toString()
                                val costPerDay = editTextCostPerday.text.toString().toFloat()
-                               val vehicle = Vehicle(vehicleType, costPerDay, uploadedImageDownloadUrls, editTextColour.text.toString(), auth.currentUser!!.uid, editTextModel.text.toString(), editTextManufacture.text.toString())
+                               val vehicle = Vehicle(vehicleType, costPerDay, uploadedImageDownloadUrls, auth.currentUser!!.uid, editTextModel.text.toString(),
+                               editTextManufacture.text.toString(), spinnerTransmissionType.selectedItem.toString(), editTextDescription.text.toString(), spinnerFuelType.selectedItem.toString())
                                databaseRef.child("vehicles").child(auth.currentUser!!.uid).setValue(vehicle)
                                progressDialog.hide()
                                Toast.makeText(activity, "Uploaded successfully!", Toast.LENGTH_SHORT).show()
@@ -139,6 +145,10 @@ class PublishCarFragment : Fragment() {
 
                }
 
+           }
+
+           else {
+               Toast.makeText(activity, "Please enter all the values and at least 1 image!", Toast.LENGTH_SHORT).show()
            }
 
        }

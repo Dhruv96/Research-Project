@@ -25,6 +25,10 @@
             android:icon="@drawable/ic_share"
             android:title="@string/publish"/>
 
+        <item android:id="@+id/published_vehicles"
+            android:icon="@drawable/ic_share"
+            android:title="@string/published_vehicles"/>
+
     </group>
 
 </menu>
