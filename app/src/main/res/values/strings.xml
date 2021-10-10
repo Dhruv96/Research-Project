@@ -57,4 +57,8 @@
     <string name="pickup_loc">Pick Up Location</string>
     <string name="pickup_date">Pick Up Date</string>
     <string name="return_date">Return Date</string>
+    <string name="transmission_type">Transmission Type</string>
+    <string name="fuel_type">Fuel Type</string>
+    <string name="description">Description</string>
+    <string name="published_vehicles">Published Vehicles</string>
 </resources>
