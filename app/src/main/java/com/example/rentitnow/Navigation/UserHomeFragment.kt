@@ -1,6 +1,5 @@
 package com.example.rentitnow.Navigation
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.rentitnow.Fragments.CarListFragment
 import com.example.rentitnow.Helpers.Companion.transformIntoDatePickerWithMinDate
 import com.example.rentitnow.R
 import com.google.firebase.auth.FirebaseAuth
@@ -30,8 +30,8 @@ class UserHomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_home, container, false)
@@ -47,7 +47,7 @@ class UserHomeFragment : Fragment() {
         databaseRef.child(id.toString()).get().addOnSuccessListener {
             if (it.exists()){
                 val firstname=it.child("fname").value
-                textViewPickup.setText("Hello "+firstname+"\n"+"Please select Pick Up Location, Date and Return Date")
+                textViewPickup.setText("Hello " + firstname + "\n" + "Please select Pick Up Location, Date and Return Date")
             }
         }.addOnFailureListener {
             Log.e("FBLOGIN_FAILD", "error retriving data")
@@ -71,19 +71,25 @@ class UserHomeFragment : Fragment() {
                     val difference = datepickup.time - dateReturn.time
                     if (difference > 0) {
                         Toast.makeText(
-                            activity,
-                            "Please select a valid return date.",
-                            Toast.LENGTH_SHORT
+                                activity,
+                                "Please select a valid return date.",
+                                Toast.LENGTH_SHORT
                         ).show()
                     } else {
-//                        val intent = Intent(activity, CarsListActivity::class.java)
-//                        intent.putExtra("pickupDate", pickupdate)
-//                        intent.putExtra("endDate", returndate)
-//                        startActivity(intent)
+                        val carListFragment = CarListFragment()
+                        val bundle = Bundle()
+                        bundle.putString(CarListFragment.PICKUP_DATE, datepickup.toString())
+                        bundle.putString(CarListFragment.RETURN_DATE, dateReturn.toString())
+                        carListFragment.arguments = bundle
+                        requireActivity().supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container_user, carListFragment, "findThisFragment")
+                                .addToBackStack(null)
+                                .commit()
                     }
+
                 } catch (exception: Exception) {
                     Toast.makeText(view.context, "Unable to find difference", Toast.LENGTH_SHORT)
-                        .show()
+                            .show()
                 }
             }
 
@@ -91,6 +97,5 @@ class UserHomeFragment : Fragment() {
 
 
     }
-
 
 }

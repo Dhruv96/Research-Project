@@ -37,6 +37,7 @@ class PublishCarFragment : Fragment() {
     val storage = Firebase.storage.reference
     val auth = Firebase.auth
     val databaseRef = FirebaseDatabase.getInstance().reference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -188,6 +189,7 @@ class PublishCarFragment : Fragment() {
 
                 var imageUri: Uri = data.data!!
                 carsImageSwitcher.setImageURI(imageUri)
+                images!!.add(imageUri)
                 position = 0
             }
         }
