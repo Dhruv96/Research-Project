@@ -139,7 +139,10 @@ class LoginActivity : AppCompatActivity() {
                     editor.putInt("userLoggedIn", 0)
                     editor.commit()
                     editor.apply()
-                    startActivity(Intent(this, NavigationActivityUser::class.java))
+                    val intent = Intent(this, NavigationActivityUser::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
                 }
                 else {
                     database.getReference("vendors").child(user.uid).get().addOnSuccessListener {
@@ -147,7 +150,10 @@ class LoginActivity : AppCompatActivity() {
                             editor.putInt("vendorLoggedIn", 0)
                             editor.commit()
                             editor.apply()
-                            startActivity(Intent(this, NavigationActivityVendor::class.java))
+                            val intent = Intent(this, NavigationActivityVendor::class.java)
+
+                            startActivity(intent)
+                            finish()
                         }
                         else {
                             Toast.makeText(this, "Some error occured", Toast.LENGTH_SHORT).show()
@@ -237,7 +243,6 @@ class LoginActivity : AppCompatActivity() {
                             }
 
 
-
                         }
                         val parameters = Bundle()
                         parameters.putString("fields", "name,email,id,picture.type(large)")
@@ -319,7 +324,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     else {
                         if(firstName != null && lastname != null && email != null ) {
-                            val currentVendor = Vendor(firstName, lastname, email, "", "", "",photoUrl)
+                            val currentVendor = Vendor(firstName, lastname, email, "", "", "", photoUrl)
                             editor.putInt("vendorLoggedIn", 2)
                             editor.commit()
                             editor.apply()
@@ -377,7 +382,9 @@ class LoginActivity : AppCompatActivity() {
         database.getReference().child("users").child(userId).get().addOnSuccessListener {
             if(it.exists()) {
                 val intent = Intent(this, NavigationActivityUser::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                finish()
             }
             else {
                 val intent = Intent(this, SignInWithGoogleAdditionalDetails::class.java)
@@ -395,7 +402,9 @@ class LoginActivity : AppCompatActivity() {
                         this,
                         NavigationActivityVendor::class.java
                 )
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                finish()
             }
             else {
                 val intent = Intent(

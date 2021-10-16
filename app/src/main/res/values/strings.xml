@@ -61,6 +61,6 @@
     <string name="fuel_type">Fuel Type</string>
     <string name="description">Description</string>
     <string name="published_vehicles">Published Vehicles</string>
-    <string name="availablecars">Available Cars</string>
+    <string name="availablecars">Available Vehicles</string>
     <string name="book">Book</string>
 </resources>

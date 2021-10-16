@@ -37,6 +37,7 @@ class PublishCarFragment : Fragment() {
     val storage = Firebase.storage.reference
     val auth = Firebase.auth
     val databaseRef = FirebaseDatabase.getInstance().reference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -128,12 +129,20 @@ class PublishCarFragment : Fragment() {
                            println("Selected Images: ${images!!.size}")
 
                            if (uploadedImageDownloadUrls.size == images!!.size) {
+                               val uuid = UUID.randomUUID().toString()
                                val vehicleType = spinnerItemType.selectedItem.toString()
                                val costPerDay = editTextCostPerday.text.toString().toFloat()
                                val vehicle = Vehicle(vehicleType, costPerDay, uploadedImageDownloadUrls, auth.currentUser!!.uid, editTextModel.text.toString(),
                                editTextManufacture.text.toString(), spinnerTransmissionType.selectedItem.toString(), editTextDescription.text.toString(), spinnerFuelType.selectedItem.toString())
-                               databaseRef.child("vehicles").child(auth.currentUser!!.uid).setValue(vehicle)
+                               databaseRef.child("vehicles").child(uuid).setValue(vehicle)
                                progressDialog.hide()
+                               images!!.clear()
+                               uploadedImageDownloadUrls.clear()
+                               editTextDescription.setText("")
+                               editTextModel.setText("")
+                               editTextCostPerday.setText("")
+                               editTextManufacture.setText("")
+                               carsImageSwitcher.setImageResource(R.drawable.addphoto)
                                Toast.makeText(activity, "Uploaded successfully!", Toast.LENGTH_SHORT).show()
                            }
                            else {
@@ -188,6 +197,7 @@ class PublishCarFragment : Fragment() {
 
                 var imageUri: Uri = data.data!!
                 carsImageSwitcher.setImageURI(imageUri)
+                images!!.add(imageUri)
                 position = 0
             }
         }
