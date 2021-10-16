@@ -184,8 +184,11 @@
 
     <EditText
         android:id="@+id/editTextDescription"
-        android:layout_width="243dp"
-        android:layout_height="103dp"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
