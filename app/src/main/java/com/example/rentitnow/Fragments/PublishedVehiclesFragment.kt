@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_published_vehicles.*
+import kotlinx.android.synthetic.main.vehicle_recyclerview_item.*
 
 
 class PublishedVehiclesFragment : Fragment() {
@@ -30,6 +31,7 @@ class PublishedVehiclesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_published_vehicles, container, false)
     }
 
@@ -38,8 +40,12 @@ class PublishedVehiclesFragment : Fragment() {
         vehiclesRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = VehicleAdapter(vehicles, requireActivity())
+
         }
-       fetchPublishedCars()
+        fetchPublishedCars()
+        vehiclesRecyclerView.adapter?.notifyDataSetChanged()
+
+
     }
 
     private fun fetchPublishedCars() {
@@ -65,5 +71,6 @@ class PublishedVehiclesFragment : Fragment() {
 
         })
     }
+
 
 }
