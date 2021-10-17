@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.vehicle_recyclerview_item.*
 
 class PublishedVehiclesFragment : Fragment() {
     var vehicles = mutableListOf<Vehicle>()
+    var vehicleids = mutableListOf<String>()
     val database = FirebaseDatabase.getInstance()
     val auth = FirebaseAuth.getInstance()
 
@@ -39,7 +40,7 @@ class PublishedVehiclesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         vehiclesRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = VehicleAdapter(vehicles, requireActivity())
+            adapter = VehicleAdapter(vehicles, requireActivity(), vehicleids)
 
         }
         fetchPublishedCars()
@@ -51,14 +52,18 @@ class PublishedVehiclesFragment : Fragment() {
     private fun fetchPublishedCars() {
         val vendorID = auth.currentUser!!.uid
         database.getReference("vehicles").
-        orderByChild("vendorID").equalTo(vendorID).addListenerForSingleValueEvent(object: ValueEventListener{
+        orderByChild("vendorID").equalTo(vendorID).addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                vehicleids.clear()
+                vehicles.clear()
                 val children = snapshot.children
                 println("count: "+snapshot.children.count().toString())
                 children.forEach {
                     val vehicle = it.getValue(Vehicle::class.java)
-                    if (vehicle != null) {
+                    val vehicleID = it.key
+                    if (vehicle != null && vehicleID != null) {
                         vehicles.add(vehicle)
+                        vehicleids.add(vehicleID)
                     }
                 }
 

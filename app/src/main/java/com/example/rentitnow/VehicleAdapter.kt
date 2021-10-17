@@ -1,8 +1,10 @@
 package com.example.rentitnow
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageSwitcher
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.rentitnow.databinding.VehicleRecyclerviewItemBinding
@@ -23,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_publish_car.view.*
 import kotlinx.android.synthetic.main.vehicle_recyclerview_item.view.*
 
 
-class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: Context) :
+class VehicleAdapter(private val vehicles: MutableList<Vehicle>, private val context: Context, private val vehicleIds: MutableList<String>) :
     RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() {
 
     val auth = Firebase.auth
@@ -58,9 +61,10 @@ class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: C
 
         holder.itemView.deleteButton.setOnClickListener{
             Log.d("delete",vehicledata.toString())
-            databaseRef.child("vehicles").child(auth.currentUser!!.uid).removeValue()
+            databaseRef.child("vehicles").child(vehicleIds.get(holder.adapterPosition)).removeValue()
             Toast.makeText(context, "Car Deleted successfully!", Toast.LENGTH_SHORT).show()
-            vehicles.drop(holder.adapterPosition)
+            //vehicles.drop(holder.adapterPosition)
+            vehicles.removeAt(holder.adapterPosition)
             Log.d("delete",vehicledata.toString())
             notifyDataSetChanged()
 
@@ -86,7 +90,7 @@ class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: C
         myView.spinnerItemType.adapter = adapter
         myView.spinnerFuelType.adapter = adapter2
         myView.spinnerTransmissionType.adapter = adapter3
-
+        myView.publishButton.text = "UPDATE"
         if (vehicledata.type == VehicleType.CAR.type) {
             myView.spinnerItemType.setSelection(0)
         } else {
@@ -109,6 +113,14 @@ class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: C
             imgView.scaleType = ImageView.ScaleType.FIT_CENTER
             imgView.setPadding(8, 8, 8, 8)
             imgView
+        }
+
+        carsImageSwitcher.setOnClickListener{
+            var intent = Intent()
+            intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(context as Activity, intent, 100, null)
         }
 
         Glide.with(context).load(vehicledata.imageUrls[position]).into(carsImageSwitcher.getCurrentView() as ImageView)
@@ -155,7 +167,7 @@ class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: C
                 val costPerDay = myView.editTextCostPerday.text.toString().toFloat()
                 val vehicle = Vehicle(vehicleType, costPerDay, vehicledata.imageUrls, auth.currentUser!!.uid, myView.editTextModel.text.toString(),
                         myView.editTextManufacture.text.toString(), myView.spinnerTransmissionType.selectedItem.toString(), myView.editTextDescription.text.toString(), myView.spinnerFuelType.selectedItem.toString())
-                databaseRef.child("vehicles").child(auth.currentUser!!.uid).setValue(vehicle)
+                databaseRef.child("vehicles").child(vehicleIds.get(holder.adapterPosition)).setValue(vehicle)
                 progressDialog.hide()
                 Toast.makeText(context, "Uploaded successfully!", Toast.LENGTH_SHORT).show()
                 notifyDataSetChanged()
