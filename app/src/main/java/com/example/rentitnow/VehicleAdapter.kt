@@ -25,11 +25,9 @@ import kotlinx.android.synthetic.main.vehicle_recyclerview_item.view.*
 
 class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: Context) :
     RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() {
-    
-    val storage = Firebase.storage.reference
+
     val auth = Firebase.auth
     val databaseRef = FirebaseDatabase.getInstance().reference
-    private var uploadedImageDownloadUrls: ArrayList<String> = ArrayList()
 
     inner class VehicleViewHolder(private val cardCellBinding: VehicleRecyclerviewItemBinding) : RecyclerView.ViewHolder(
             cardCellBinding.root
@@ -53,7 +51,6 @@ class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: C
         val vehicledata: Vehicle = vehicles.get(position)
 
         holder.itemView.editButton.setOnClickListener{
-
             updateCarDetails(vehicledata, holder)
             notifyDataSetChanged()
 
@@ -121,9 +118,6 @@ class VehicleAdapter(private val vehicles: List<Vehicle>, private val context: C
         myView.editTextManufacture.setText(vehicledata.manufacture)
         myView.editTextDescription.setText(vehicledata.description)
 
-        carsImageSwitcher.setOnClickListener {
-//            openGalleryForImages()
-        }
 
         myView.nextButton.setOnClickListener {
             if (vehicledata.imageUrls!!.size > 0) {
