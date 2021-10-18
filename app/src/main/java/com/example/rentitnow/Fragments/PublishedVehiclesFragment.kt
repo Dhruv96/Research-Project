@@ -24,6 +24,7 @@ class PublishedVehiclesFragment : Fragment() {
     var vehicleids = mutableListOf<String>()
     val database = FirebaseDatabase.getInstance()
     val auth = FirebaseAuth.getInstance()
+    lateinit var listener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,7 @@ class PublishedVehiclesFragment : Fragment() {
 
     private fun fetchPublishedCars() {
         val vendorID = auth.currentUser!!.uid
-        database.getReference("vehicles").
+        listener = database.getReference("vehicles").
         orderByChild("vendorID").equalTo(vendorID).addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 vehicleids.clear()
@@ -75,6 +76,12 @@ class PublishedVehiclesFragment : Fragment() {
             }
 
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        database.getReference("vehicles").removeEventListener(listener)
+        println("Listener removed")
     }
 
 
