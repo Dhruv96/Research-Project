@@ -60,13 +60,25 @@ class VehicleAdapter(private val vehicles: MutableList<Vehicle>, private val con
         }
 
         holder.itemView.deleteButton.setOnClickListener{
+
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Confirm Action")
+            builder.setMessage("Are you sure, you want to delete this vehicle ?")
+            builder.setPositiveButton(android.R.string.ok) { dialog, which ->
+                databaseRef.child("vehicles").child(vehicleIds.get(holder.adapterPosition)).removeValue()
+                Toast.makeText(context, "Car Deleted successfully!", Toast.LENGTH_SHORT).show()
+                vehicles.removeAt(holder.adapterPosition)
+                Log.d("delete",vehicledata.toString())
+                notifyDataSetChanged()
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton(android.R.string.no) { dialog, which ->
+               dialog.dismiss()
+            }
+
+            builder.show()
             Log.d("delete",vehicledata.toString())
-            databaseRef.child("vehicles").child(vehicleIds.get(holder.adapterPosition)).removeValue()
-            Toast.makeText(context, "Car Deleted successfully!", Toast.LENGTH_SHORT).show()
-            //vehicles.drop(holder.adapterPosition)
-            vehicles.removeAt(holder.adapterPosition)
-            Log.d("delete",vehicledata.toString())
-            notifyDataSetChanged()
 
         }
 
@@ -182,9 +194,6 @@ class VehicleAdapter(private val vehicles: MutableList<Vehicle>, private val con
         }
         dialog.show()
     }
-
-
-
 
     override fun getItemCount(): Int {
         return vehicles.size
