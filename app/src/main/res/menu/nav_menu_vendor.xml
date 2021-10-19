@@ -17,17 +17,17 @@
             android:icon="@drawable/ic_history"
             android:title="@string/booking"/>
 
-        <item android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="@string/logout"/>
-
         <item android:id="@+id/publish"
-            android:icon="@drawable/ic_share"
+            android:icon="@drawable/publish"
             android:title="@string/publish"/>
 
         <item android:id="@+id/published_vehicles"
-            android:icon="@drawable/ic_share"
+            android:icon="@drawable/published_vehicles"
             android:title="@string/published_vehicles"/>
+
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout"/>
 
     </group>
 
