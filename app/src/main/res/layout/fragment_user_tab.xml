@@ -101,8 +101,7 @@
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toEndOf="@+id/textViewPhn"
+        app:layout_constraintStart_toEndOf="@+id/textViewPswd"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <TextView
