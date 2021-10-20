@@ -1,6 +1,5 @@
 package com.example.rentitnow
 
-import android.net.Uri
 
 data class User(
     var fname: String="",
