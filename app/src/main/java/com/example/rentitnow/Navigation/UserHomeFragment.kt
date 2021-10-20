@@ -65,7 +65,7 @@ class UserHomeFragment : Fragment() {
                 try {
                     val datepickup: Date
                     val dateReturn: Date
-                    val dates = SimpleDateFormat("MM/dd/yyyy")
+                    val dates = SimpleDateFormat("MM/dd/yyyy HH:mm")
                     datepickup = dates.parse(pickupdate)
                     dateReturn = dates.parse(returndate)
                     val difference = datepickup.time - dateReturn.time

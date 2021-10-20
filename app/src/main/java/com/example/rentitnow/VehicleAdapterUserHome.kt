@@ -1,10 +1,12 @@
 package com.example.rentitnow
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.rentitnow.Fragments.VehicleDetailsFragment
 import com.example.rentitnow.databinding.VehicleListItemBinding
 import com.example.rentitnow.databinding.VehicleRecyclerviewItemBinding
 
@@ -16,6 +18,18 @@ class VehicleAdapterUserHome(private val vehicles: List<Vehicle>, private val co
             cardCellBinding.transmissionTypeTextView.text = vehicle.transmissionType
             cardCellBinding.pricePerDayTextView.text = "$" + vehicle.costPerDay.toString() + " per Day"
             Glide.with(context).load(vehicle.imageUrls[0]).into(cardCellBinding.carImageView)
+
+            cardCellBinding.buttonView.setOnClickListener {
+                val bundle = Bundle()
+                val vehicleDetails = VehicleDetailsFragment()
+                bundle.putParcelable(VehicleDetailsFragment.VEHICLE, vehicles.get(adapterPosition))
+                vehicleDetails.arguments = bundle
+                (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_user, vehicleDetails, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit()
+            }
+
         }
     }
 

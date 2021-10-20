@@ -70,7 +70,6 @@ class CarListFragment : Fragment() {
         database.getReference("vehicles").addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val children = snapshot.children
-                println("count: "+snapshot.children.count().toString())
                 children.forEach {
                     val vehicle = it.getValue(Vehicle::class.java)
                     if (vehicle != null) {

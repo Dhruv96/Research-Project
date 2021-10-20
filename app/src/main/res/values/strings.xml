@@ -63,4 +63,6 @@
     <string name="published_vehicles">Published Vehicles</string>
     <string name="availablecars">Available Vehicles</string>
     <string name="book">Book</string>
+    <string name="view">View</string>
+    <string name="proceed">Prooceed To Booking</string>
 </resources>
