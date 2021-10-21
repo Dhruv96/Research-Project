@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
 import com.google.firebase.database.FirebaseDatabase
@@ -24,8 +25,13 @@ import java.util.*
 class VehicleDetailsFragment : Fragment() {
     lateinit var timer: Timer
     var vehicle: Vehicle? = null
+    lateinit var pickupDate: String
+    lateinit var returnDate: String
+
    companion object {
        val VEHICLE = "vehicle"
+       val PICKUP_DATE = "pickup_date"
+       val RETURN_DATE = "return_date"
    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,17 +50,22 @@ class VehicleDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if(arguments != null) {
             vehicle = requireArguments().getParcelable<Vehicle>(VEHICLE)
+            pickupDate = requireArguments().getString(PICKUP_DATE).toString()
+            returnDate = requireArguments().getString(RETURN_DATE).toString()
+            println("INSIDE VEHICLE DETAILS")
+            println(pickupDate)
+            println(returnDate)
             if(vehicle != null) {
-                val inAnim: Animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_in)
-                val outAnim: Animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_out)
+//                val inAnim: Animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_in)
+//                val outAnim: Animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_out)
                 vehicleImageSwitcher?.setFactory{
                     val imgView = ImageView(requireContext())
                     imgView.scaleType = ImageView.ScaleType.FIT_CENTER
                     imgView.setPadding(8, 8, 8, 8)
                     imgView
                 }
-                vehicleImageSwitcher.setInAnimation(inAnim)
-                vehicleImageSwitcher.setOutAnimation(outAnim)
+//                vehicleImageSwitcher.setInAnimation(inAnim)
+//                vehicleImageSwitcher.setOutAnimation(outAnim)
                 println(vehicle!!.imageUrls.size)
                 timer = Timer()
                 timer.schedule(object : TimerTask() {
@@ -65,7 +76,10 @@ class VehicleDetailsFragment : Fragment() {
                         }
                         println("Position: ${position}")
                         activity?.runOnUiThread{
-                            Glide.with(context).load(vehicle!!.imageUrls[position]).into(vehicleImageSwitcher.currentView as ImageView)
+                            Glide.with(context)
+                                    .load(vehicle!!.imageUrls[position])
+                                    .transition(DrawableTransitionOptions.withCrossFade(1500))
+                                    .into(vehicleImageSwitcher.currentView as ImageView)
                             position++
                         }
                     }
@@ -98,8 +112,9 @@ class VehicleDetailsFragment : Fragment() {
             }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun onStop() {
+        super.onStop()
         timer.cancel()
     }
 
