@@ -59,7 +59,7 @@ class CarListFragment : Fragment() {
             textViewReturnDate.text = returnDate
             recyclerViewVehicles.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = VehicleAdapterUserHome(vehicles, requireActivity())
+                adapter = VehicleAdapterUserHome(vehicles, requireActivity(), pickupDate, returnDate)
             }
             fetchVehicles()
         }
