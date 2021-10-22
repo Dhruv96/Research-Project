@@ -31,23 +31,3 @@ data class Vehicle (
     var transmissionType: String = "" ,
     var description: String = "" ,
     var fuelType: String = ""):Parcelable
-
-
-//    constructor(type: String, costPerDay: Float, imageUrls: List<String>, vendorID: String, model: String, manufacture: String, transmissionType: String, description: String, fuelType: String) {
-//        this.type = type
-//        this.costPerDay = costPerDay
-//        this.imageUrls = imageUrls
-//        this.vendorID = vendorID
-//        this.model = model
-//        this.manufacture = manufacture
-//        this.transmissionType = transmissionType
-//        this.description = description
-//        this.fuelType = fuelType
-//    }
-
-//    constructor() {
-//
-//    }
-
-
-//}

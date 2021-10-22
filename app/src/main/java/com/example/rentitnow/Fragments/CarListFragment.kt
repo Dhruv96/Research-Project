@@ -18,16 +18,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_car_list.*
 import kotlinx.android.synthetic.main.fragment_published_vehicles.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CarListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CarListFragment : Fragment() {
 
     val auth = FirebaseAuth.getInstance()
@@ -35,8 +26,10 @@ class CarListFragment : Fragment() {
     var vehicles = mutableListOf<Vehicle>()
 
     companion object {
+        val pickUpLocation="pickup_loc"
         val PICKUP_DATE = "pickupDate"
         val RETURN_DATE = "returnDate"
+        val NoofDays="noOf_days"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +48,13 @@ class CarListFragment : Fragment() {
         if(arguments != null) {
             val pickupDate = requireArguments().getString(PICKUP_DATE)
             val returnDate = requireArguments().getString(RETURN_DATE)
+            val pickuploc = requireArguments().getString(pickUpLocation)
+            val noofdays = requireArguments().getString(NoofDays)
             textViewPickUpDate.text = pickupDate
             textViewReturnDate.text = returnDate
             recyclerViewVehicles.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = VehicleAdapterUserHome(vehicles, requireActivity(), pickupDate, returnDate)
+                adapter = VehicleAdapterUserHome(vehicles, requireActivity(), pickupDate, returnDate,pickuploc,noofdays)
             }
             fetchVehicles()
         }

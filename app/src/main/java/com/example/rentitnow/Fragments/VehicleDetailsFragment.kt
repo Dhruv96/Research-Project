@@ -1,20 +1,19 @@
 package com.example.rentitnow.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_vehicle_details.*
 import java.util.*
 
@@ -27,11 +26,15 @@ class VehicleDetailsFragment : Fragment() {
     var vehicle: Vehicle? = null
     lateinit var pickupDate: String
     lateinit var returnDate: String
+    lateinit var pickUploc: String
+    lateinit var noofDays: String
 
    companion object {
        val VEHICLE = "vehicle"
        val PICKUP_DATE = "pickup_date"
        val RETURN_DATE = "return_date"
+       val PickUpLoc="pickup_loc"
+       val NoofDays="noOf_days"
    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,20 +55,18 @@ class VehicleDetailsFragment : Fragment() {
             vehicle = requireArguments().getParcelable<Vehicle>(VEHICLE)
             pickupDate = requireArguments().getString(PICKUP_DATE).toString()
             returnDate = requireArguments().getString(RETURN_DATE).toString()
-            println("INSIDE VEHICLE DETAILS")
-            println(pickupDate)
-            println(returnDate)
+            pickUploc=requireArguments().getString(PickUpLoc).toString()
+            noofDays=requireArguments().getString(NoofDays).toString()
+
             if(vehicle != null) {
-//                val inAnim: Animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_in)
-//                val outAnim: Animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_out)
+
                 vehicleImageSwitcher?.setFactory{
                     val imgView = ImageView(requireContext())
                     imgView.scaleType = ImageView.ScaleType.FIT_CENTER
                     imgView.setPadding(8, 8, 8, 8)
                     imgView
                 }
-//                vehicleImageSwitcher.setInAnimation(inAnim)
-//                vehicleImageSwitcher.setOutAnimation(outAnim)
+
                 println(vehicle!!.imageUrls.size)
                 timer = Timer()
                 timer.schedule(object : TimerTask() {
@@ -90,10 +91,22 @@ class VehicleDetailsFragment : Fragment() {
                 fuelType.text = vehicle!!.fuelType
                 transmissionType.text = vehicle!!.transmissionType
                 vehicleDescription.text = vehicle!!.description
+                pricePerday.text= vehicle!!.costPerDay.toString()
                 fetchVendorName()
 
-                bookingProceed.setOnClickListener {
-
+                selectAddons.setOnClickListener {
+                    val bundle = Bundle()
+                    val vehicleDetails = CarAddonsFragment()
+                    bundle.putParcelable(CarAddonsFragment.VEHICLE,vehicle)
+                    bundle.putString(CarAddonsFragment.PICKUP_DATE, pickupDate)
+                    bundle.putString(CarAddonsFragment.RETURN_DATE, returnDate)
+                    bundle.putString(CarAddonsFragment.PickUpLoc, pickUploc)
+                    bundle.putString(CarAddonsFragment.NoofDays, noofDays)
+                    vehicleDetails.arguments = bundle
+                    (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_user, vehicleDetails, "findThisFragment")
+                            .addToBackStack(null)
+                            .commit()
                 }
             }
         }
