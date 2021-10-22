@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.ConfirmBookingFragment">
+
+    <View
+        android:id="@+id/viewSeperator4"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="222dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4A4949"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewvehicle" />
+
+    <View
+        android:id="@+id/viewSeperator5"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4A4949"
+        app:layout_constraintEnd_toStartOf="@+id/textViewOR"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPayAtPickup" />
+
+    <View
+        android:id="@+id/viewSeperator7"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4A4949"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewOR"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPayAtPickup" />
+
+    <TextView
+        android:id="@+id/textViewAddons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/add_ons"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitleAddOns"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleCarPrice" />
+
+    <TextView
+        android:id="@+id/textViewAddOns"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewTitleCarPrice"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator1" />
+
+    <TextView
+        android:id="@+id/textViewTitleAddOns"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="124dp"
+        android:fontFamily="@font/lato_bold"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator1" />
+
+    <View
+        android:id="@+id/viewSeperator3"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4A4949"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewvehicle" />
+
+    <TextView
+        android:id="@+id/textViewTaxes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/taxes"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitlePVRT"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator3" />
+
+    <TextView
+        android:id="@+id/textViewFinalAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="150dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/finalw"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitlePST" />
+
+    <TextView
+        android:id="@+id/textViewFinalPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewFinalAmount"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPST" />
+
+    <TextView
+        android:id="@+id/textViewTitlePVRT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="124dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/pvrt"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator1" />
+
+    <TextView
+        android:id="@+id/textViewVLC"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewTitleCarPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCarPrice" />
+
+    <TextView
+        android:id="@+id/textViewTitleVLC"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="124dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/vlcrec"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleCarPrice" />
+
+    <TextView
+        android:id="@+id/textViewPST"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewTitleCarPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textViewGST" />
+
+    <TextView
+        android:id="@+id/textViewGST"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewTitleCarPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVLC" />
+
+    <TextView
+        android:id="@+id/textViewTitlePST"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="124dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/pst"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleGST" />
+
+    <TextView
+        android:id="@+id/textViewPVRT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textViewTitleCarPrice"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator1" />
+
+    <TextView
+        android:id="@+id/textViewTitleGST"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="124dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/gst"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleVLC" />
+
+    <View
+        android:id="@+id/viewSeperator2"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="132dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4A4949"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewvehicle" />
+
+    <View
+        android:id="@+id/viewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:background="#6200EE"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewPageHeading"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="5dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/confirmation"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewTitle"
+        app:layout_constraintEnd_toEndOf="@+id/viewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/viewTitle" />
+
+    <Button
+        android:id="@+id/buttonPayAtPickup"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        android:elevation="5dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:textColor="#414141"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPayPaypal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPayPaypal"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        android:elevation="5dp"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="#414141"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewPickupPrice"
+        android:layout_width="99dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonPayAtPickup" />
+
+    <TextView
+        android:id="@+id/textViewPayatPickUp"
+        android:layout_width="134dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/payAtPickup"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/buttonPayAtPickup"
+        app:layout_constraintTop_toTopOf="@+id/buttonPayAtPickup" />
+
+    <TextView
+        android:id="@+id/textViewOR"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="OR"
+        android:textColor="#414141"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPayAtPickup" />
+
+    <TextView
+        android:id="@+id/textViewPaypalPrice"
+        android:layout_width="99dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonPayPaypal" />
+
+    <TextView
+        android:id="@+id/textViewPaypal"
+        android:layout_width="177dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/payUsingPaypal"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/buttonPayPaypal"
+        app:layout_constraintTop_toTopOf="@+id/buttonPayPaypal" />
+
+
+    <TextView
+        android:id="@+id/textViewvehicle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/vehicle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPageHeading"/>
+
+    <TextView
+        android:id="@+id/textViewTitleCarPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="124dp"
+        android:fontFamily="@font/lato_bold"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator1" />
+
+
+
+    <TextView
+        android:id="@+id/textViewCarPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="end"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewTitleCarPrice"
+        app:layout_constraintTop_toBottomOf="@+id/viewSeperator1" />
+
+
+    <View
+        android:id="@+id/viewSeperator1"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4A4949"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewvehicle" />
+
+    <Button
+        android:id="@+id/buttonInformationTaxes"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/information"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddOns" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

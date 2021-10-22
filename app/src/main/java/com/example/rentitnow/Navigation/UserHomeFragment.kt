@@ -20,7 +20,7 @@ import java.util.*
 
 
 class UserHomeFragment : Fragment() {
-
+    var noOfDays=""
     private lateinit var databaseRef : DatabaseReference
     private lateinit var auth: FirebaseAuth
 
@@ -58,6 +58,7 @@ class UserHomeFragment : Fragment() {
         buttonConfirmPickUp.setOnClickListener(View.OnClickListener {
             val pickupdate = editTextPickupDate.text.toString()
             val returndate = editTextReturnDate.text.toString()
+            val pickuplocation=editTextPickupLocation.selectedItem.toString()
             if (pickupdate.isEmpty() || returndate.isEmpty()) {
                 Toast.makeText(activity, "Please select pickup and return dates", Toast.LENGTH_SHORT).show()
             } else {
@@ -75,11 +76,16 @@ class UserHomeFragment : Fragment() {
                                 "Please select a valid return date.",
                                 Toast.LENGTH_SHORT
                         ).show()
-                    } else {
+                    }
+                    else {
+                        val differenceDates = Math.abs(difference) / (24 * 60 * 60 * 1000)
+                        noOfDays= differenceDates.toString()
                         val carListFragment = CarListFragment()
                         val bundle = Bundle()
                         bundle.putString(CarListFragment.PICKUP_DATE, datepickup.toString())
                         bundle.putString(CarListFragment.RETURN_DATE, dateReturn.toString())
+                        bundle.putString(CarListFragment.pickUpLocation,pickuplocation)
+                        bundle.putString(CarListFragment.NoofDays,noOfDays)
                         carListFragment.arguments = bundle
                         requireActivity().supportFragmentManager.beginTransaction()
                                 .replace(R.id.fragment_container_user, carListFragment, "findThisFragment")

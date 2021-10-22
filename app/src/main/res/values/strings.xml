@@ -64,5 +64,20 @@
     <string name="availablecars">Available Vehicles</string>
     <string name="book">Book</string>
     <string name="view">View</string>
-    <string name="proceed">Prooceed To Booking</string>
+    <string name="proceed">Select Add Ons</string>
+    <string name="add_ons">ADD ONS</string>
+    <string name="childSeat">Child Seat ($50)</string>
+    <string name="petrolOrDiesel">Petrol or Diesel ($50)</string>
+    <string name="addionalKey">Additional Key ($5)</string>
+    <string name="Proceed">Proceed to Booking</string>
+    <string name="taxes">Taxes</string>
+    <string name="finalw">Final</string>
+    <string name="pvrt">PVRT</string>
+    <string name="vlcrec">VLF</string>
+    <string name="gst">GOODS AND SVCS TAX (5.0%)</string>
+    <string name="pst">PST (7.0%)</string>
+    <string name="confirmation">Confirm Booking</string>
+    <string name="payAtPickup">PAY AT PICKUP</string>
+    <string name="payUsingPaypal">PAY USING PAYPAL</string>
+    <string name="vehicle">VEHICLE</string>
 </resources>
