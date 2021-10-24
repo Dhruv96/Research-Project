@@ -65,6 +65,8 @@ class CarAddonsFragment : Fragment() {
 
     private fun calculateAddOns() {
         if (checkBoxAddionalKey.isChecked || checkBoxChildSeat.isChecked || checkBoxPorD.isChecked) {
+            stringSelectedAddOns=""
+            addOnPrice=0
             if (checkBoxAddionalKey.isChecked) {
                 stringSelectedAddOns += "Additional Key"
                 addOnPrice += 5

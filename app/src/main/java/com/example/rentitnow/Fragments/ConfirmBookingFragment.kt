@@ -1,10 +1,13 @@
 package com.example.rentitnow.Fragments
 
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageSwitcher
 import androidx.fragment.app.Fragment
 import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.R
@@ -50,7 +53,7 @@ class ConfirmBookingFragment : Fragment() {
                 finalVehiclePriceWithAddOns = selectedVehicle!!.costPerDay.toDouble() * booking.noOfDays.toDouble() + booking.addOnsPrice.toDouble()
 
                 pricePVRT = 1.50 * booking.noOfDays.toDouble()
-                priceVLF = 1.07 * booking.noOfDays.toDouble()
+                priceVLF = 2.00 * booking.noOfDays.toDouble()
                 priceGST = 0.05 * finalVehiclePriceWithAddOns
                 pricePST = 0.07 * finalVehiclePriceWithAddOns
 
@@ -78,6 +81,16 @@ class ConfirmBookingFragment : Fragment() {
 
         textViewPaypalPrice.setText(String.format("CAD %.2f", finalPriceWithDiscount))
         textViewPickupPrice.setText(String.format("CAD %.2f", finalvehiclePriceWithTax))
+
+        buttonInformationTaxes.setOnClickListener({
+            val mydialog = AlertDialog.Builder(context)
+            val inflater = LayoutInflater.from(context)
+            val myView: View = inflater.inflate(R.layout.taxes_info_layout, null)
+            mydialog.setView(myView)
+            val dialog = mydialog.create()
+            dialog.setCancelable(true)
+            dialog.show()
+        })
 
     }
 

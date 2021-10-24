@@ -80,4 +80,15 @@
     <string name="payAtPickup">PAY AT PICKUP</string>
     <string name="payUsingPaypal">PAY USING PAYPAL</string>
     <string name="vehicle">VEHICLE</string>
+    <string name="tax_info">
+        "<b>Taxes and Fees</b>"
+        "<ul>"
+        "<li>Passenger Vehicle Rental Tax (PVRT),
+        PVRT is charged at a rate of $1.50/day.</li>"
+        "<li>Goods and services tax (GST),It is 5% of final price with Addons.</li>"
+        "<li>B.C. provincial sales tax (PST),It is 7% of final price with Addons.</li>"
+        "<li>nVehicle Licensing Fee (VLF),VLF is charged at a rate of $2/day,
+        This fee is for Rentit Now charge of the proportionate amount of vehicle registration, licensing and related fees applicable to a rental.</li>"
+        "</ul>"
+    </string>
 </resources>

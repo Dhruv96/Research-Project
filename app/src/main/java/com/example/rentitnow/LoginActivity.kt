@@ -137,6 +137,7 @@ class LoginActivity : AppCompatActivity() {
             database.getReference("users").child(user.uid).get().addOnSuccessListener {
                 if(it.exists()) {
                     editor.putInt("userLoggedIn", 0)
+                    editor.putString("userId", user.uid)
                     editor.commit()
                     editor.apply()
                     val intent = Intent(this, NavigationActivityUser::class.java)
@@ -148,6 +149,7 @@ class LoginActivity : AppCompatActivity() {
                     database.getReference("vendors").child(user.uid).get().addOnSuccessListener {
                         if (it.exists()) {
                             editor.putInt("vendorLoggedIn", 0)
+                            editor.putString("vendorId", user.uid)
                             editor.commit()
                             editor.apply()
                             val intent = Intent(this, NavigationActivityVendor::class.java)
@@ -418,6 +420,25 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
+    override fun onStart() {
+
+        val pref = applicationContext.getSharedPreferences("logged_in", 0) // 0 - for private mode
+        val editor = pref.edit()
+        if (pref.contains("userLoggedIn")) {
+            if (pref.getInt("userLoggedIn",0) == 0||pref.getInt("userLoggedIn",0) == 1||pref.getInt("userLoggedIn",0) == 2) {
+                val intent = Intent(this, NavigationActivityUser::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            }
+        }else if (pref.contains("vendorLoggedIn")){
+            val intent = Intent(this, NavigationActivityVendor::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }
+        super.onStart()
     }
     }
 
