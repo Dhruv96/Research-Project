@@ -36,12 +36,13 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
     private lateinit var pref: SharedPreferences
     lateinit var drawerLayout: DrawerLayout
     private lateinit var auth: FirebaseAuth
+    lateinit var navigationView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation_vendor)
         drawerLayout=findViewById(R.id.drawer_layout_vendor)
-        var navigationView: NavigationView=findViewById(R.id.nav_view_vendor)
+        navigationView = findViewById(R.id.nav_view_vendor)
         val toolbar = findViewById<Toolbar>(R.id.toolBarVendor)
         val navHeader = navigationView.getHeaderView(0)
 

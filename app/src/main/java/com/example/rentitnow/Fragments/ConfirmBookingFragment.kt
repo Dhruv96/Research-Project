@@ -9,11 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageSwitcher
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.rentitnow.BuildConfig
 import com.example.rentitnow.Data.Booking
+import com.example.rentitnow.Data.BookingStatus
+import com.example.rentitnow.Data.PaymentStatus
+import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import com.paypal.checkout.PayPalCheckout
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
@@ -28,6 +34,9 @@ import com.paypal.checkout.createorder.UserAction
 import com.paypal.checkout.error.OnError
 import com.paypal.checkout.order.*
 import kotlinx.android.synthetic.main.fragment_confirm_booking.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.util.*
 
 
 class ConfirmBookingFragment : Fragment() {
@@ -41,7 +50,9 @@ class ConfirmBookingFragment : Fragment() {
     private val YOUR_CLIENT_ID = "AZex4sT9oBS9jI4pSYwvdoZyrhy6oe7h5rUDOEMlPhlT-I9yUHEfAWhG7PsH9ltqx3mvqmd9x-3WU6Ay"
 
     private lateinit var booking: Booking
+    private lateinit var vehicleId: String
     private var selectedVehicle: Vehicle? = null
+    private val database = FirebaseDatabase.getInstance().reference
 
     companion object {
         val VEHICLE = "vehicle"
@@ -51,6 +62,7 @@ class ConfirmBookingFragment : Fragment() {
         val AddOnsString="addOns_string"
         val AddOnsPrice="addOns_price"
         val NoofDays="noOf_days"
+        val VEHICLE_ID = "vehicle_id"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,10 +74,12 @@ class ConfirmBookingFragment : Fragment() {
 
         if (arguments != null) {
             selectedVehicle=requireArguments().getParcelable<Vehicle>(VEHICLE)
-            booking = Booking(requireArguments().getString(AddOnsString).toString(), requireArguments().getString(AddOnsPrice)!!.toFloat(),
-                    requireArguments().getString(PickUpLoc).toString(),"",requireArguments().getString(PICKUP_DATE).toString(),
-                    requireArguments().getString(PICKUP_DATE).toString(), requireArguments().getString(NoofDays)!!.toInt(),0.0f,"",
-                     "", selectedVehicle!!.vendorID)
+            vehicleId = requireArguments().getString(VEHICLE_ID).toString()
+            booking = Booking(requireArguments().getString(AddOnsString).toString(), requireArguments().getString(AddOnsPrice)!!.toDouble(),
+                    requireArguments().getString(PickUpLoc).toString(),PaymentStatus.PENDING.type,requireArguments().getString(PICKUP_DATE).toString(),
+                    requireArguments().getString(PICKUP_DATE).toString(), requireArguments().getString(NoofDays)!!.toInt(),0.0,BookingStatus.UPCOMING.type,
+                     vehicleId, selectedVehicle!!.vendorID)
+
                 finalVehiclePrice = selectedVehicle?.costPerDay?.toDouble()!! * booking?.noOfDays?.toDouble()!!
                 finalVehiclePriceWithAddOns = selectedVehicle!!.costPerDay.toDouble() * booking.noOfDays.toDouble() + booking.addOnsPrice.toDouble()
 
@@ -149,6 +163,23 @@ class ConfirmBookingFragment : Fragment() {
                     if(captureOrderResult is CaptureOrderResult.Success) {
                         println("Payment Succeeded")
                         // open success screen
+                        booking.paymentStatus = PaymentStatus.PAID.type
+                        val df = DecimalFormat("#.##")
+                        df.roundingMode = RoundingMode.CEILING
+                        val priceUptoTwoDecimal = df.format(finalPriceWithDiscount)
+                        booking.finalPrice = priceUptoTwoDecimal.toDouble()
+                        val bookingID = UUID.randomUUID().toString()
+                        database.child("bookings").child(bookingID).setValue(booking).addOnSuccessListener {
+                            val bookingDone = BookingDoneFragment()
+                            (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container_user, bookingDone, "findThisFragment")
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                            .addOnFailureListener{
+                                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+                            }
+
                     }
                     else if(captureOrderResult is CaptureOrderResult.Error) {
                         println("Payment Failed")

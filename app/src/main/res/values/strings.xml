@@ -91,4 +91,6 @@
         This fee is for Rentit Now charge of the proportionate amount of vehicle registration, licensing and related fees applicable to a rental.</li>"
         "</ul>"
     </string>
+    <string name="booking_done">Booking Done Successfully</string>
+    <string name="back_to_home">Back To Home</string>
 </resources>

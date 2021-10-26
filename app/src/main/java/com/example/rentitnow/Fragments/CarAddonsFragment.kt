@@ -17,15 +17,18 @@ import java.util.*
 
 
 class CarAddonsFragment : Fragment() {
-     var stringSelectedAddOns = ""
-     var addOnPrice = 0
+    var stringSelectedAddOns = ""
+    var addOnPrice = 0
     var vehicle: Vehicle? = null
     lateinit var pickupDate: String
     lateinit var returnDate: String
     lateinit var pickUploc: String
     lateinit var noofDays: String
+    lateinit var vehicle_id: String
+
     companion object {
         val VEHICLE = "vehicle"
+        val VEHICLE_ID = "vehicle_id"
         val PICKUP_DATE = "pickup_date"
         val RETURN_DATE = "return_date"
         val PickUpLoc="pickup_loc"
@@ -35,11 +38,12 @@ class CarAddonsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(arguments != null) {
-            vehicle = requireArguments().getParcelable<Vehicle>(VehicleDetailsFragment.VEHICLE)
-            pickupDate = requireArguments().getString(VehicleDetailsFragment.PICKUP_DATE).toString()
-            returnDate = requireArguments().getString(VehicleDetailsFragment.RETURN_DATE).toString()
+            vehicle = requireArguments().getParcelable(VEHICLE)
+            pickupDate = requireArguments().getString(PICKUP_DATE).toString()
+            returnDate = requireArguments().getString(RETURN_DATE).toString()
             pickUploc=requireArguments().getString(VehicleDetailsFragment.PickUpLoc).toString()
             noofDays=requireArguments().getString(VehicleDetailsFragment.NoofDays).toString()
+            vehicle_id = requireArguments().getString(VEHICLE_ID).toString()
 
             buttonBooking.setOnClickListener(View.OnClickListener {
                 calculateAddOns()
@@ -52,6 +56,7 @@ class CarAddonsFragment : Fragment() {
                 bundle.putString(ConfirmBookingFragment.AddOnsString, stringSelectedAddOns)
                 bundle.putString(ConfirmBookingFragment.AddOnsPrice, addOnPrice.toString())
                 bundle.putString(ConfirmBookingFragment.NoofDays, noofDays)
+                bundle.putString(ConfirmBookingFragment.VEHICLE_ID, vehicle_id)
                 vehicleDetails.arguments = bundle
                 Log.d("addons", bundle.toString())
                 (context as NavigationActivityUser).supportFragmentManager.beginTransaction()

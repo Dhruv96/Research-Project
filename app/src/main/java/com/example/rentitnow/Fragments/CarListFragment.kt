@@ -24,6 +24,7 @@ class CarListFragment : Fragment() {
     val auth = FirebaseAuth.getInstance()
     val database = FirebaseDatabase.getInstance()
     var vehicles = mutableListOf<Vehicle>()
+    var vehicleIds = mutableListOf<String>()
 
     companion object {
         val pickUpLocation="pickup_loc"
@@ -54,7 +55,7 @@ class CarListFragment : Fragment() {
             textViewReturnDate.text = returnDate
             recyclerViewVehicles.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = VehicleAdapterUserHome(vehicles, requireActivity(), pickupDate, returnDate,pickuploc,noofdays)
+                adapter = VehicleAdapterUserHome(vehicles, vehicleIds, requireActivity(), pickupDate, returnDate,pickuploc,noofdays)
             }
             fetchVehicles()
         }
@@ -67,8 +68,10 @@ class CarListFragment : Fragment() {
                 val children = snapshot.children
                 children.forEach {
                     val vehicle = it.getValue(Vehicle::class.java)
-                    if (vehicle != null) {
+                    val vehicleId = it.key
+                    if (vehicle != null && vehicleId != null) {
                         vehicles.add(vehicle)
+                        vehicleIds.add(vehicleId)
                     }
                 }
 

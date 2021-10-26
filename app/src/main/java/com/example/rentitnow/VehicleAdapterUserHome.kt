@@ -10,7 +10,7 @@ import com.example.rentitnow.Fragments.VehicleDetailsFragment
 import com.example.rentitnow.databinding.VehicleListItemBinding
 import com.example.rentitnow.databinding.VehicleRecyclerviewItemBinding
 
-class VehicleAdapterUserHome(private val vehicles: List<Vehicle>, private val context: Context,
+class VehicleAdapterUserHome(private val vehicles: List<Vehicle>, private val vehicleIds: List<String>, private val context: Context,
          private val pickupDate: String?, private val returnDate: String?,private val pickUpLoc: String?,private val noOfDays: String?): RecyclerView.Adapter<VehicleAdapterUserHome.VehicleViewHolder>() {
 
     inner class VehicleViewHolder(private val cardCellBinding: VehicleListItemBinding) : RecyclerView.ViewHolder(cardCellBinding.root) {
@@ -24,6 +24,7 @@ class VehicleAdapterUserHome(private val vehicles: List<Vehicle>, private val co
                 val bundle = Bundle()
                 val vehicleDetails = VehicleDetailsFragment()
                 bundle.putParcelable(VehicleDetailsFragment.VEHICLE, vehicles.get(adapterPosition))
+                bundle.putString(VehicleDetailsFragment.VEHICLE_ID, vehicleIds.get(adapterPosition))
                 bundle.putString(VehicleDetailsFragment.PICKUP_DATE, pickupDate)
                 bundle.putString(VehicleDetailsFragment.RETURN_DATE, returnDate)
                 bundle.putString(VehicleDetailsFragment.PickUpLoc, pickUpLoc)

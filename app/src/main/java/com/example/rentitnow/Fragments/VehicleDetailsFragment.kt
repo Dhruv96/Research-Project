@@ -28,9 +28,11 @@ class VehicleDetailsFragment : Fragment() {
     lateinit var returnDate: String
     lateinit var pickUploc: String
     lateinit var noofDays: String
+    lateinit var vehicleId: String
 
    companion object {
        val VEHICLE = "vehicle"
+       val VEHICLE_ID = "vehicle_id"
        val PICKUP_DATE = "pickup_date"
        val RETURN_DATE = "return_date"
        val PickUpLoc="pickup_loc"
@@ -53,13 +55,14 @@ class VehicleDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if(arguments != null) {
             vehicle = requireArguments().getParcelable<Vehicle>(VEHICLE)
+            vehicleId = requireArguments().getString(VEHICLE_ID).toString()
             pickupDate = requireArguments().getString(PICKUP_DATE).toString()
             returnDate = requireArguments().getString(RETURN_DATE).toString()
             pickUploc=requireArguments().getString(PickUpLoc).toString()
             noofDays=requireArguments().getString(NoofDays).toString()
+            println("VEHICLE ID: ${vehicleId}")
 
             if(vehicle != null) {
-
                 vehicleImageSwitcher?.setFactory{
                     val imgView = ImageView(requireContext())
                     imgView.scaleType = ImageView.ScaleType.FIT_CENTER
@@ -102,6 +105,7 @@ class VehicleDetailsFragment : Fragment() {
                     bundle.putString(CarAddonsFragment.RETURN_DATE, returnDate)
                     bundle.putString(CarAddonsFragment.PickUpLoc, pickUploc)
                     bundle.putString(CarAddonsFragment.NoofDays, noofDays)
+                    bundle.putString(CarAddonsFragment.VEHICLE_ID, vehicleId)
                     vehicleDetails.arguments = bundle
                     (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_user, vehicleDetails, "findThisFragment")
