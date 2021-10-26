@@ -317,7 +317,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <com.paypal.checkout.paymentbutton.PayPalButton
         android:id="@+id/buttonPayPaypal"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -389,19 +389,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonPayPaypal" />
 
-    <TextView
-        android:id="@+id/textViewPaypal"
-        android:layout_width="177dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="32dp"
-        android:elevation="10dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/payUsingPaypal"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/buttonPayPaypal"
-        app:layout_constraintTop_toTopOf="@+id/buttonPayPaypal" />
+<!--    <TextView-->
+<!--        android:id="@+id/textViewPaypal"-->
+<!--        android:layout_width="177dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="32dp"-->
+<!--        android:elevation="10dp"-->
+<!--        android:fontFamily="@font/lato_bold"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/payUsingPaypal"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/buttonPayPaypal"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/buttonPayPaypal" />-->
 
 
     <TextView
