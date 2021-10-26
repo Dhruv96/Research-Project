@@ -37,6 +37,8 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("%%%")
+        println(BuildConfig.APPLICATION_ID)
         setContentView(R.layout.activity_user_home)
         drawerLayout=findViewById(R.id.drawer_layout)
         var navigationView: NavigationView=findViewById(R.id.nav_view)

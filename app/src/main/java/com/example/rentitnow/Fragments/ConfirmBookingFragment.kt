@@ -1,6 +1,7 @@
 package com.example.rentitnow.Fragments
 
 import android.app.AlertDialog
+import android.app.Application
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageSwitcher
 import androidx.fragment.app.Fragment
+import com.example.rentitnow.BuildConfig
 import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
+import com.paypal.checkout.PayPalCheckout
+import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.cancel.OnCancel
+import com.paypal.checkout.config.CheckoutConfig
+import com.paypal.checkout.config.Environment
+import com.paypal.checkout.config.SettingsConfig
+import com.paypal.checkout.createorder.CreateOrder
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.OrderIntent
+import com.paypal.checkout.createorder.OrderIntent.*
+import com.paypal.checkout.createorder.UserAction
+import com.paypal.checkout.error.OnError
+import com.paypal.checkout.order.*
 import kotlinx.android.synthetic.main.fragment_confirm_booking.*
 
 
@@ -23,6 +38,7 @@ class ConfirmBookingFragment : Fragment() {
     private var priceGST = 0.0
     private var pricePST = 0.0
     private var finalvehiclePriceWithTax = 0.0
+    private val YOUR_CLIENT_ID = "AZex4sT9oBS9jI4pSYwvdoZyrhy6oe7h5rUDOEMlPhlT-I9yUHEfAWhG7PsH9ltqx3mvqmd9x-3WU6Ay"
 
     private lateinit var booking: Booking
     private var selectedVehicle: Vehicle? = null
@@ -36,6 +52,7 @@ class ConfirmBookingFragment : Fragment() {
         val AddOnsPrice="addOns_price"
         val NoofDays="noOf_days"
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,7 +99,7 @@ class ConfirmBookingFragment : Fragment() {
         textViewPaypalPrice.setText(String.format("CAD %.2f", finalPriceWithDiscount))
         textViewPickupPrice.setText(String.format("CAD %.2f", finalvehiclePriceWithTax))
 
-        buttonInformationTaxes.setOnClickListener({
+        buttonInformationTaxes.setOnClickListener{
             val mydialog = AlertDialog.Builder(context)
             val inflater = LayoutInflater.from(context)
             val myView: View = inflater.inflate(R.layout.taxes_info_layout, null)
@@ -90,9 +107,64 @@ class ConfirmBookingFragment : Fragment() {
             val dialog = mydialog.create()
             dialog.setCancelable(true)
             dialog.show()
-        })
+        }
 
+        val config = CheckoutConfig(
+            application = requireActivity().application,
+            clientId = YOUR_CLIENT_ID,
+            environment = Environment.SANDBOX,
+            returnUrl = "${BuildConfig.APPLICATION_ID}://paypalpay",
+            currencyCode = CurrencyCode.CAD,
+            userAction = UserAction.PAY_NOW,
+
+            settingsConfig = SettingsConfig(
+                loggingEnabled = true
+            )
+        )
+        PayPalCheckout.setConfig(config)
+        println("AMOUNT: ${finalPriceWithDiscount}")
+
+        buttonPayPaypal.setup(
+            createOrder = CreateOrder { createOrderActions ->
+                val order = Order(
+                    intent = CAPTURE,
+                    appContext = AppContext(
+                        userAction = UserAction.PAY_NOW
+                    ),
+                    purchaseUnitList = listOf(
+                        PurchaseUnit(
+                            amount = Amount(
+                                currencyCode = CurrencyCode.CAD,
+                                value = String.format("%.2f", finalPriceWithDiscount)
+                            )
+                        )
+                    )
+                )
+
+                createOrderActions.create(order)
+            },
+            onApprove = OnApprove { approval ->
+                approval.orderActions.capture { captureOrderResult ->
+                    Log.i("CaptureOrder", "CaptureOrderResult: $captureOrderResult")
+                    if(captureOrderResult is CaptureOrderResult.Success) {
+                        println("Payment Succeeded")
+                        // open success screen
+                    }
+                    else if(captureOrderResult is CaptureOrderResult.Error) {
+                        println("Payment Failed")
+                        // show error
+                    }
+                }
+            },
+
+            onError = OnError { errorInfo ->
+                Log.d("OnError", "Error: $errorInfo")
+                println(errorInfo.reason)
+            }
+
+        )
     }
+
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
