@@ -33,6 +33,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
     private lateinit var databaseRef : DatabaseReference
     private lateinit var pref: SharedPreferences
     lateinit var drawerLayout: DrawerLayout
+    lateinit var navigationView:NavigationView
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +42,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         println(BuildConfig.APPLICATION_ID)
         setContentView(R.layout.activity_user_home)
         drawerLayout=findViewById(R.id.drawer_layout)
-        var navigationView: NavigationView=findViewById(R.id.nav_view)
+        navigationView =findViewById(R.id.nav_view)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         val navHeader = navigationView.getHeaderView(0)
 

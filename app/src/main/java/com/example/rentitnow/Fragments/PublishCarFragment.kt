@@ -144,6 +144,7 @@ class PublishCarFragment : Fragment() {
                                editTextManufacture.setText("")
                                carsImageSwitcher.setImageResource(R.drawable.addphoto)
                                Toast.makeText(activity, "Uploaded successfully!", Toast.LENGTH_SHORT).show()
+                               (activity as NavigationActivityVendor).navigationView.setCheckedItem(R.id.published_vehicles)
                                requireActivity().supportFragmentManager.beginTransaction()
                                        .replace(R.id.fragment_container_vendor, PublishedVehiclesFragment(), "findThisFragment")
                                        .addToBackStack(null)
