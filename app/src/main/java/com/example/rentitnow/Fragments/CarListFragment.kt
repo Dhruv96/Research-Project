@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.VehicleAdapterUserHome
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
@@ -17,14 +18,19 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_car_list.*
 import kotlinx.android.synthetic.main.fragment_published_vehicles.*
+import java.text.SimpleDateFormat
 
 
 class CarListFragment : Fragment() {
-
     val auth = FirebaseAuth.getInstance()
     val database = FirebaseDatabase.getInstance()
     var vehicles = mutableListOf<Vehicle>()
     var vehicleIds = mutableListOf<String>()
+    var bookings = mutableListOf<Booking>()
+    lateinit var pickupDate: String
+    lateinit var returnDate: String
+    lateinit var listener1: ValueEventListener
+    lateinit var listener2: ValueEventListener
 
     companion object {
         val pickUpLocation="pickup_loc"
@@ -47,8 +53,9 @@ class CarListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(arguments != null) {
-            val pickupDate = requireArguments().getString(PICKUP_DATE)
-            val returnDate = requireArguments().getString(RETURN_DATE)
+            pickupDate = requireArguments().getString(PICKUP_DATE).toString()
+            returnDate = requireArguments().getString(RETURN_DATE).toString()
+            println("PICKUP DATE: ${pickupDate}")
             val pickuploc = requireArguments().getString(pickUpLocation)
             val noofdays = requireArguments().getString(NoofDays)
             textViewPickUpDate.text = pickupDate
@@ -57,14 +64,18 @@ class CarListFragment : Fragment() {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = VehicleAdapterUserHome(vehicles, vehicleIds, requireActivity(), pickupDate, returnDate,pickuploc,noofdays)
             }
+            println("Inside onviewcreated")
             fetchVehicles()
         }
 
     }
 
     private fun fetchVehicles() {
-        database.getReference("vehicles").addListenerForSingleValueEvent(object: ValueEventListener {
+        listener1 =database.getReference("vehicles").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                println("VEHICLES CLEARED")
+                vehicles.clear()
+                vehicleIds.clear()
                 val children = snapshot.children
                 children.forEach {
                     val vehicle = it.getValue(Vehicle::class.java)
@@ -74,8 +85,7 @@ class CarListFragment : Fragment() {
                         vehicleIds.add(vehicleId)
                     }
                 }
-
-                recyclerViewVehicles.adapter?.notifyDataSetChanged()
+                fetchBookings()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -85,5 +95,58 @@ class CarListFragment : Fragment() {
         })
     }
 
+    private fun fetchBookings() {
+        listener2 = database.getReference("bookings").addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                println("BOOKINGS CLEARED")
+                bookings.clear()
+                val children = snapshot.children
+                children.forEach {
+                    val booking = it.getValue(Booking::class.java)
+                    if (booking != null) {
+                        bookings.add(booking)
+                    }
+                }
+                filterVehicles()
+            }
 
-}
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(activity, error.message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun filterVehicles() {
+        bookings.forEach { booking ->
+               val dateFormatter = SimpleDateFormat("MM/dd/yyyy HH:mm")
+               val pDate = dateFormatter.parse(pickupDate)
+               val rDate = dateFormatter.parse(returnDate)
+               val bookingPDate = dateFormatter.parse(booking.pickUpDate)
+               val bookingRDate = dateFormatter.parse(booking.returnDate)
+
+
+               if(!((pDate.compareTo(bookingRDate) > 0) || (rDate.compareTo(bookingPDate) < 0))){
+                   // Hide vehicle from user
+                   val index = vehicleIds.indexOf(booking.vehicleId)
+                   if(index != -1) {
+                       vehicleIds.removeAt(index)
+                       vehicles.removeAt(index)
+                   }
+               }
+           }
+
+        recyclerViewVehicles.adapter?.notifyDataSetChanged()
+        }
+
+
+    override fun onStop() {
+        super.onStop()
+        println("STOPPED")
+        database.getReference("vehicles").removeEventListener(listener1)
+        database.getReference("bookings").removeEventListener(listener2)
+        println("Listener removed from car list")
+    }
+    }
+
+

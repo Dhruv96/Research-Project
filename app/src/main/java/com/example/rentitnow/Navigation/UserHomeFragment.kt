@@ -24,10 +24,6 @@ class UserHomeFragment : Fragment() {
     private lateinit var databaseRef : DatabaseReference
     private lateinit var auth: FirebaseAuth
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +65,8 @@ class UserHomeFragment : Fragment() {
                     val dates = SimpleDateFormat("MM/dd/yyyy HH:mm")
                     datepickup = dates.parse(pickupdate)
                     dateReturn = dates.parse(returndate)
+                    val datePickupString = dates.format(datepickup)
+                    val dateReturnString = dates.format(dateReturn)
                     val difference = datepickup.time - dateReturn.time
                     if (difference > 0) {
                         Toast.makeText(
@@ -82,8 +80,8 @@ class UserHomeFragment : Fragment() {
                         noOfDays= differenceDates.toString()
                         val carListFragment = CarListFragment()
                         val bundle = Bundle()
-                        bundle.putString(CarListFragment.PICKUP_DATE, datepickup.toString())
-                        bundle.putString(CarListFragment.RETURN_DATE, dateReturn.toString())
+                        bundle.putString(CarListFragment.PICKUP_DATE, datePickupString)
+                        bundle.putString(CarListFragment.RETURN_DATE, dateReturnString)
                         bundle.putString(CarListFragment.pickUpLocation,pickuplocation)
                         bundle.putString(CarListFragment.NoofDays,noOfDays)
                         carListFragment.arguments = bundle

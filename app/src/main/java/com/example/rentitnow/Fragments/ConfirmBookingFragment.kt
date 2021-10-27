@@ -77,7 +77,7 @@ class ConfirmBookingFragment : Fragment() {
             vehicleId = requireArguments().getString(VEHICLE_ID).toString()
             booking = Booking(requireArguments().getString(AddOnsString).toString(), requireArguments().getString(AddOnsPrice)!!.toDouble(),
                     requireArguments().getString(PickUpLoc).toString(),PaymentStatus.PENDING.type,requireArguments().getString(PICKUP_DATE).toString(),
-                    requireArguments().getString(PICKUP_DATE).toString(), requireArguments().getString(NoofDays)!!.toInt(),0.0,BookingStatus.UPCOMING.type,
+                    requireArguments().getString(RETURN_DATE).toString(), requireArguments().getString(NoofDays)!!.toInt(),0.0,BookingStatus.UPCOMING.type,
                      vehicleId, selectedVehicle!!.vendorID)
 
                 finalVehiclePrice = selectedVehicle?.costPerDay?.toDouble()!! * booking?.noOfDays?.toDouble()!!
