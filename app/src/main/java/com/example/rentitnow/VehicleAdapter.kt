@@ -37,7 +37,7 @@ class VehicleAdapter(private val vehicles: MutableList<Vehicle>, private val con
     ) {
         fun bindVehicle(vehicle: Vehicle) {
             cardCellBinding.carNameTextView.text = vehicle.manufacture + " " + vehicle.model
-            cardCellBinding.transmissionTypeTextView.text = vehicle.transmissionType
+            cardCellBinding.TextViewStartType.text = vehicle.transmissionType
             cardCellBinding.pricePerDayTextView.text = "$" + vehicle.costPerDay.toString() + " per Day"
             Glide.with(context).load(vehicle.imageUrls[0]).into(cardCellBinding.carImageView)
         }

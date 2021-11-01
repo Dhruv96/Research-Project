@@ -11,14 +11,14 @@ import android.view.ViewGroup
 import android.widget.ImageSwitcher
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.rentitnow.*
 import com.example.rentitnow.BuildConfig
 import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.Data.BookingStatus
 import com.example.rentitnow.Data.PaymentStatus
-import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
-import com.example.rentitnow.Vehicle
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.paypal.checkout.PayPalCheckout
 import com.paypal.checkout.approve.OnApprove
@@ -34,6 +34,8 @@ import com.paypal.checkout.createorder.UserAction
 import com.paypal.checkout.error.OnError
 import com.paypal.checkout.order.*
 import kotlinx.android.synthetic.main.fragment_confirm_booking.*
+import kotlinx.android.synthetic.main.fragment_vehicle_details.*
+import kotlinx.android.synthetic.main.fragment_vendor_home.*
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
@@ -53,6 +55,11 @@ class ConfirmBookingFragment : Fragment() {
     private lateinit var vehicleId: String
     private var selectedVehicle: Vehicle? = null
     private val database = FirebaseDatabase.getInstance().reference
+    private lateinit var auth: FirebaseAuth
+    private lateinit var UserId: String
+    private lateinit var UserFirstname: String
+
+    private lateinit var databaseRef : DatabaseReference
 
     companion object {
         val VEHICLE = "vehicle"
@@ -67,18 +74,33 @@ class ConfirmBookingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
+//            UserFirstname=""
+//            auth = FirebaseAuth.getInstance()
+//            val user = auth.currentUser
+//            UserId= user?.uid.toString()
+//            databaseRef= FirebaseDatabase.getInstance().getReference("users")
+//            databaseRef.child(UserId).get().addOnSuccessListener {
+//                if (it.exists()){
+//                    UserFirstname= it.child("fname").value.toString()
+//                    println("User "+UserFirstname)
+//                }
+//            }.addOnFailureListener {
+//                Log.e("FBLOGIN_FAILD", "error retriving data")
+//            }
+            fetchUserName()
+            println("Booking Class "+UserFirstname)
+            println("Booking Class Id "+UserId)
             selectedVehicle=requireArguments().getParcelable<Vehicle>(VEHICLE)
             vehicleId = requireArguments().getString(VEHICLE_ID).toString()
             booking = Booking(requireArguments().getString(AddOnsString).toString(), requireArguments().getString(AddOnsPrice)!!.toDouble(),
                     requireArguments().getString(PickUpLoc).toString(),PaymentStatus.PENDING.type,requireArguments().getString(PICKUP_DATE).toString(),
                     requireArguments().getString(RETURN_DATE).toString(), requireArguments().getString(NoofDays)!!.toInt(),0.0,BookingStatus.UPCOMING.type,
-                     vehicleId, selectedVehicle!!.vendorID)
+                     vehicleId, selectedVehicle!!.vendorID, selectedVehicle!!.model,selectedVehicle!!.manufacture,selectedVehicle!!.imageUrls,UserId,UserFirstname)
 
                 finalVehiclePrice = selectedVehicle?.costPerDay?.toDouble()!! * booking?.noOfDays?.toDouble()!!
                 finalVehiclePriceWithAddOns = selectedVehicle!!.costPerDay.toDouble() * booking.noOfDays.toDouble() + booking.addOnsPrice.toDouble()
@@ -195,13 +217,28 @@ class ConfirmBookingFragment : Fragment() {
 
         )
     }
+    private fun fetchUserName() {
+        UserFirstname=""
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        UserId= user?.uid.toString()
+        databaseRef= FirebaseDatabase.getInstance().getReference("users")
+        databaseRef.child(UserId).get().addOnSuccessListener {
+                UserFirstname= it.child("fname").value.toString()
+            booking.userFname=UserFirstname
+                println("User "+UserFirstname)
+
+        }.addOnFailureListener {
+            Log.e("FBLOGIN_FAILD", "error retriving data")
+        }
+    }
 
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_confirm_booking, container, false)
     }
 
