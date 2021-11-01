@@ -67,6 +67,7 @@ class PublishedVehiclesFragment : Fragment() {
                         vehicleids.add(vehicleID)
                     }
                 }
+                println("Vehicles"+vehicles)
 
                 vehiclesRecyclerView.adapter?.notifyDataSetChanged()
             }

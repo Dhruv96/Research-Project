@@ -93,4 +93,9 @@
     </string>
     <string name="booking_done">Booking Done Successfully</string>
     <string name="back_to_home">Back To Home</string>
+    <string name="currentbookings">Current Bookings</string>
+    <string name="nobookings">No Bookings Found</string>
+    <string name="startdate">Start Date</string>
+    <string name="enddate">End Date</string>
+    <string name="bookingid">Booking ID</string>
 </resources>

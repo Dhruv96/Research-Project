@@ -25,6 +25,14 @@ data class Booking(
         var bookingStatus: String= "",
         var vehicleId:String="",
         var vendorId:String="",
+
+        var model: String = "" ,
+        var manufacture: String = "" ,
+        var imageUrls: List<String> = mutableListOf(),
+        var userId: String = "",
+        var userFname: String = ""
+
+
 ): java.io.Serializable {
 
     fun finalPrice(format: String) {
