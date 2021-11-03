@@ -1,6 +1,6 @@
 package com.example.rentitnow
 
-class Vendor (
+data class Vendor (
     var fname: String,
     var lname:String,
     var email: String,
@@ -8,3 +8,9 @@ class Vendor (
     var address:String,
     var city: String,
     var profileImgUrl: String?): java.io.Serializable
+{
+        constructor() :
+                this("", "", "", "", "" ,"", "") {
+
+        }
+}

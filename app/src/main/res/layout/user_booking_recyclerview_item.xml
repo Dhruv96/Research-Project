@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
@@ -28,7 +28,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/carImageView"
+                android:id="@+id/vehicleImageView"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:adjustViewBounds="true"
@@ -67,35 +67,35 @@
 
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/TextViewStartType"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="0.7"
-                android:text="@string/startdate"
-                android:textAlignment="viewStart"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/TextViewStartType"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="0.7"
+                    android:text="@string/startdate"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/textViewEndDate"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="0.7"
-                android:text="@string/enddate"
-                android:textAlignment="textEnd"
-                android:textSize="18sp" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/textViewEndDate"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="0.7"
+                    android:text="@string/enddate"
+                    android:textAlignment="textEnd"
+                    android:textSize="18sp" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textViewUserName"
+                    android:id="@+id/textViewVendorName"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="10dp"
@@ -130,6 +130,6 @@
         </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
+</androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
