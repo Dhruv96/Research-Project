@@ -59,7 +59,6 @@ class VendorHomeFragment : Fragment() {
     }
     private fun fetchBookingDetails() {
         val vendorID = auth.currentUser!!.uid
-        println("Vendor Id"+vendorID)
         listener = database.getReference("bookings").
         orderByChild("vendorId").equalTo(vendorID).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
