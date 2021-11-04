@@ -1,5 +1,6 @@
 package com.example.rentitnow.Data
 
+
 enum class PaymentStatus (val type: String){
         PENDING("pending"),
         PAID("paid")
@@ -10,7 +11,6 @@ enum class BookingStatus (val type: String){
         IN_PROGRESS("in_progress"),
         COMPLETED("completed")
 }
-
 
 
 data class Booking(
@@ -25,14 +25,7 @@ data class Booking(
         var bookingStatus: String= "",
         var vehicleId:String="",
         var vendorId:String="",
-
-        var model: String = "" ,
-        var manufacture: String = "" ,
-        var imageUrls: List<String> = mutableListOf(),
-        var userId: String = "",
-        var userFname: String = ""
-
-
+        var userId: String = ""
 ): java.io.Serializable {
 
     fun finalPrice(format: String) {

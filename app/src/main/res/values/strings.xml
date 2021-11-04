@@ -98,4 +98,5 @@
     <string name="startdate">Start Date</string>
     <string name="enddate">End Date</string>
     <string name="bookingid">Booking ID</string>
+    <string name="pastBookings">Past Bookiings</string>
 </resources>

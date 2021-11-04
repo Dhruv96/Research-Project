@@ -57,9 +57,6 @@ class ConfirmBookingFragment : Fragment() {
     private val database = FirebaseDatabase.getInstance().reference
     private lateinit var auth: FirebaseAuth
     private lateinit var UserId: String
-    private lateinit var UserFirstname: String
-
-    private lateinit var databaseRef : DatabaseReference
 
     companion object {
         val VEHICLE = "vehicle"
@@ -79,28 +76,15 @@ class ConfirmBookingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
-//            UserFirstname=""
-//            auth = FirebaseAuth.getInstance()
-//            val user = auth.currentUser
-//            UserId= user?.uid.toString()
-//            databaseRef= FirebaseDatabase.getInstance().getReference("users")
-//            databaseRef.child(UserId).get().addOnSuccessListener {
-//                if (it.exists()){
-//                    UserFirstname= it.child("fname").value.toString()
-//                    println("User "+UserFirstname)
-//                }
-//            }.addOnFailureListener {
-//                Log.e("FBLOGIN_FAILD", "error retriving data")
-//            }
-            fetchUserName()
-            println("Booking Class "+UserFirstname)
-            println("Booking Class Id "+UserId)
+            auth = FirebaseAuth.getInstance()
+            val user = auth.currentUser
+            UserId= user?.uid.toString()
             selectedVehicle=requireArguments().getParcelable<Vehicle>(VEHICLE)
             vehicleId = requireArguments().getString(VEHICLE_ID).toString()
             booking = Booking(requireArguments().getString(AddOnsString).toString(), requireArguments().getString(AddOnsPrice)!!.toDouble(),
                     requireArguments().getString(PickUpLoc).toString(),PaymentStatus.PENDING.type,requireArguments().getString(PICKUP_DATE).toString(),
                     requireArguments().getString(RETURN_DATE).toString(), requireArguments().getString(NoofDays)!!.toInt(),0.0,BookingStatus.UPCOMING.type,
-                     vehicleId, selectedVehicle!!.vendorID, selectedVehicle!!.model,selectedVehicle!!.manufacture,selectedVehicle!!.imageUrls,UserId,UserFirstname)
+                     vehicleId, selectedVehicle!!.vendorID,UserId)
 
                 finalVehiclePrice = selectedVehicle?.costPerDay?.toDouble()!! * booking?.noOfDays?.toDouble()!!
                 finalVehiclePriceWithAddOns = selectedVehicle!!.costPerDay.toDouble() * booking.noOfDays.toDouble() + booking.addOnsPrice.toDouble()
@@ -216,21 +200,6 @@ class ConfirmBookingFragment : Fragment() {
             }
 
         )
-    }
-    private fun fetchUserName() {
-        UserFirstname=""
-        auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        UserId= user?.uid.toString()
-        databaseRef= FirebaseDatabase.getInstance().getReference("users")
-        databaseRef.child(UserId).get().addOnSuccessListener {
-                UserFirstname= it.child("fname").value.toString()
-            booking.userFname=UserFirstname
-                println("User "+UserFirstname)
-
-        }.addOnFailureListener {
-            Log.e("FBLOGIN_FAILD", "error retriving data")
-        }
     }
 
 
