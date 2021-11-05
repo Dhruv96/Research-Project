@@ -1,6 +1,10 @@
 package com.example.rentitnow.Data
 
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+
 enum class PaymentStatus (val type: String){
         PENDING("pending"),
         PAID("paid")
@@ -13,6 +17,7 @@ enum class BookingStatus (val type: String){
 }
 
 
+@Parcelize
 data class Booking(
         var addOnsString: String= "",
         var addOnsPrice: Double=0.0,
@@ -25,15 +30,8 @@ data class Booking(
         var bookingStatus: String= "",
         var vehicleId:String="",
         var vendorId:String="",
-
-        var model: String = "" ,
-        var manufacture: String = "" ,
-        var imageUrls: List<String> = mutableListOf(),
-        var userId: String = "",
-        var userFname: String = ""
-
-
-): java.io.Serializable {
+        var userId: String = ""
+): java.io.Serializable, Parcelable {
 
     fun finalPrice(format: String) {
 

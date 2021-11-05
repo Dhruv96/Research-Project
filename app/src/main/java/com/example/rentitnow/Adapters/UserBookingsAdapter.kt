@@ -65,7 +65,7 @@ class UserBookingsAdapter(private val bookings: List<Booking>, private val booki
             cardCellBinding.textViewBookingId.text = bookingId.substring(0,10)
             cardCellBinding.TextViewStartType.text = booking.pickUpDate
             cardCellBinding.textViewEndDate.text = booking.returnDate
-            cardCellBinding.pricePerDayTextView.text = booking.finalPrice.toString()
+            cardCellBinding.pricePerDayTextView.text = "$" +booking.finalPrice.toString()
             fetchVehicleDetails(booking.vehicleId, cardCellBinding.carNameTextView, cardCellBinding.vehicleImageView)
             fetchVendorDetails(booking.vendorId, cardCellBinding.textViewVendorName)
         }
