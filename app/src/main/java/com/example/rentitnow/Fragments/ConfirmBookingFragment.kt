@@ -216,6 +216,11 @@ class ConfirmBookingFragment : Fragment() {
             }
 
         )
+
+        buttonPayAtPickup.setOnClickListener {
+
+        }
+
     }
     private fun fetchUserName() {
         UserFirstname=""

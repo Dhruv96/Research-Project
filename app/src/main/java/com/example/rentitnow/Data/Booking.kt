@@ -1,5 +1,6 @@
 package com.example.rentitnow.Data
 
+
 enum class PaymentStatus (val type: String){
         PENDING("pending"),
         PAID("paid")
@@ -10,7 +11,6 @@ enum class BookingStatus (val type: String){
         IN_PROGRESS("in_progress"),
         COMPLETED("completed")
 }
-
 
 
 data class Booking(
