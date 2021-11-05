@@ -200,6 +200,11 @@ class ConfirmBookingFragment : Fragment() {
             }
 
         )
+
+        buttonPayAtPickup.setOnClickListener {
+
+        }
+
     }
 
 

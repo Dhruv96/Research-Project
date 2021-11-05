@@ -1,5 +1,6 @@
 package com.example.rentitnow.Data
 
+
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
@@ -14,6 +15,7 @@ enum class BookingStatus (val type: String){
         IN_PROGRESS("in_progress"),
         COMPLETED("completed")
 }
+
 
 @Parcelize
 data class Booking(
