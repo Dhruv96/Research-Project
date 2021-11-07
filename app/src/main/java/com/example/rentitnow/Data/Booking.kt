@@ -33,8 +33,5 @@ data class Booking(
         var userId: String = ""
 ): java.io.Serializable, Parcelable {
 
-    fun finalPrice(format: String) {
-
-    }
 
 }

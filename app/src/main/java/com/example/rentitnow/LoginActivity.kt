@@ -26,6 +26,10 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
+import android.text.TextUtils
+
+
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -70,6 +74,22 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener(View.OnClickListener {
             loginBtnAction()
         })
+
+        forgotPassBtn.setOnClickListener{
+            val email: String = emailEditText.getText().toString().trim()
+            if (TextUtils.isEmpty(email)) {
+                Toast.makeText(application, "Enter your registered email id", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else {
+                auth.sendPasswordResetEmail(email).addOnSuccessListener {
+                    Toast.makeText(this, "Password reset link sent to ${email}", Toast.LENGTH_SHORT).show()
+                }
+                    .addOnFailureListener {
+                        Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }
 
 
 
