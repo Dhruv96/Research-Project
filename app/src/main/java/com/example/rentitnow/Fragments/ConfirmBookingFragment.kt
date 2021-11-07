@@ -96,8 +96,10 @@ class ConfirmBookingFragment : Fragment() {
 
                 finalvehiclePriceWithTax = finalVehiclePriceWithAddOns + pricePVRT + priceVLF + priceGST + pricePST
 
-                booking.finalPrice(String.format("%.2f", finalvehiclePriceWithTax))
-
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            val priceUptoTwoDecimal = df.format(finalvehiclePriceWithTax)
+            booking.finalPrice = priceUptoTwoDecimal.toDouble()
         }
 
         //Set values in recipt
@@ -202,7 +204,17 @@ class ConfirmBookingFragment : Fragment() {
         )
 
         buttonPayAtPickup.setOnClickListener {
-
+            val bookingID = UUID.randomUUID().toString()
+            database.child("bookings").child(bookingID).setValue(booking).addOnSuccessListener {
+                val bookingDone = BookingDoneFragment()
+                (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_user, bookingDone, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit()
+            }
+                .addOnFailureListener{
+                    Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
+                }
         }
 
     }
