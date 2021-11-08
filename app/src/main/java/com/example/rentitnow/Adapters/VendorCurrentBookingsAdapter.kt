@@ -3,17 +3,16 @@ package com.example.rentitnow.Adapters
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.rentitnow.*
 import com.example.rentitnow.Data.Booking
+import com.example.rentitnow.Data.BookingStatus
 import com.example.rentitnow.Fragments.VendorBookingDetailsFragment
-import com.example.rentitnow.NavigationActivityUser
-import com.example.rentitnow.R
-import com.example.rentitnow.User
-import com.example.rentitnow.Vehicle
 import com.example.rentitnow.databinding.VendorCurrentBookingsBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -40,8 +39,23 @@ class VendorCurrentBookingsAdapter(
             cardCellBinding.finalpriceTextView.text = "$" + booking.finalPrice.toString()
             fetchVehicleDetails(booking.vehicleId, cardCellBinding.carNameTextView, cardCellBinding.vehicleImageView)
             fetchUserDetails(booking.userId, cardCellBinding.textViewUserName)
+            if(booking.bookingStatus== BookingStatus.COMPLETED.type){
+                cardCellBinding.buttonViewBookingDetails.visibility=View.INVISIBLE
+            }
+            cardCellBinding.buttonViewBookingDetails.setOnClickListener{
+                val bundle = Bundle()
+                val vendorBookingsDetails = VendorBookingDetailsFragment()
+                bundle.putParcelable(VendorBookingDetailsFragment.BOOKING,bookings.get(adapterPosition))
+                bundle.putString(VendorBookingDetailsFragment.BOOKINGID,bookingIds.get(adapterPosition))
+                vendorBookingsDetails.arguments = bundle
+                (context as NavigationActivityVendor).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_vendor, vendorBookingsDetails, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit()
+            }
 
         }
+
         private fun fetchVehicleDetails(vehicleId: String, vehicleName: TextView, imageView: ImageView) {
             database.getReference("vehicles").child(vehicleId).get().addOnSuccessListener {
                 vehicle = it.getValue(Vehicle::class.java)
@@ -71,18 +85,17 @@ class VendorCurrentBookingsAdapter(
 
     override fun onBindViewHolder(holder: CurrentBookingsHolder, position: Int) {
         holder.bindVehicle(bookings[position], bookingIds[position])
-        holder.itemView.setOnClickListener({
-            val bundle = Bundle()
-            val vendorBookingsDetails = VendorBookingDetailsFragment()
-            bundle.putParcelable(VendorBookingDetailsFragment.BOOKING,bookings.get(position))
-            bundle.putString(VendorBookingDetailsFragment.BOOKING,bookingIds.get(position))
-            vendorBookingsDetails.arguments = bundle
-            (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_user, vendorBookingsDetails, "findThisFragment")
-                .addToBackStack(null)
-                .commit()
-
-        })
+//        holder.itemView.setOnClickListener({
+//            val bundle = Bundle()
+//            val vendorBookingsDetails = VendorBookingDetailsFragment()
+//            bundle.putParcelable(VendorBookingDetailsFragment.BOOKING,bookings.get(position))
+//            bundle.putString(VendorBookingDetailsFragment.BOOKING,bookingIds.get(position))
+//            vendorBookingsDetails.arguments = bundle
+//            (context as NavigationActivityVendor).supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container_vendor, vendorBookingsDetails, "findThisFragment")
+//                .addToBackStack(null)
+//                .commit()
+//        })
     }
 
     override fun getItemCount(): Int {

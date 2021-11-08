@@ -81,7 +81,7 @@ class CarAddonsFragment : Fragment() {
                 addOnPrice += 50
             }
             if (checkBoxPorD.isChecked) {
-                stringSelectedAddOns += "| Petrol or Diesel"
+                stringSelectedAddOns += "| Petrol or Diesel of value $50"
                 addOnPrice += 50
             }
         } else {
