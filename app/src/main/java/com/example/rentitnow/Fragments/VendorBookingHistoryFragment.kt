@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rentitnow.Adapters.VendorCurrentBookingsAdapter
 import com.example.rentitnow.Data.Booking
+import com.example.rentitnow.Data.BookingStatus
 import com.example.rentitnow.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -66,7 +67,7 @@ class VendorBookingHistoryFragment : Fragment() {
                 children.forEach {
                     val booking = it.getValue(Booking::class.java)
                     val bookingId = it.key
-                    if (booking?.bookingStatus.equals("completed")){
+                    if (booking?.bookingStatus== BookingStatus.COMPLETED.type){
                         if (booking != null && bookingId != null) {
                             bookings.add(booking)
                             bookingIds.add(bookingId)

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.rentitnow.Adapters.VendorCurrentBookingsAdapter
 import com.example.rentitnow.Data.Booking
+import com.example.rentitnow.Data.BookingStatus
 import com.example.rentitnow.R
 import com.example.rentitnow.User
 import com.example.rentitnow.Vehicle
@@ -69,7 +70,7 @@ class VendorHomeFragment : Fragment() {
                 children.forEach {
                     val booking = it.getValue(Booking::class.java)
                     val bookingId = it.key
-                    if (booking?.bookingStatus.equals("upcoming")){
+                    if (booking?.bookingStatus== BookingStatus.UPCOMING.type||booking?.bookingStatus==BookingStatus.IN_PROGRESS.type){
                         if (booking != null && bookingId != null) {
                             bookings.add(booking)
                             bookingIds.add(bookingId)
