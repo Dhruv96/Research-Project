@@ -74,58 +74,60 @@ class VendorBookingDetailsFragment : Fragment() {
 
                 }
 
-                if (buttonIssueCar.text.equals("Take Payement")){
-                    buttonIssueCar.setOnClickListener {
-                        builder.setMessage("Please Use POS/collect cash of " + "$" + booking?.finalPrice.toString())
-                        builder.setPositiveButton(android.R.string.ok) { dialog, which ->
-                            buttonIssueCar.text = "Issue Car"
-                            booking?.paymentStatus = PaymentStatus.PAID.type
-                            database.getReference("bookings").child(bookingId).setValue(booking)
-                            Toast.makeText(context, "Payement Completed", Toast.LENGTH_SHORT).show()
-                            dialog.dismiss()
-                        }
+            buttonIssueCar.setOnClickListener {
+                if (buttonIssueCar.text.equals("Take Payement")) {
 
-                        builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
-                            dialog.dismiss()
-                        }
-
-                        builder.show()
+                    builder.setMessage("Please Use POS/collect cash of " + "$" + booking?.finalPrice.toString())
+                    builder.setPositiveButton(android.R.string.ok) { dialog, which ->
+                        buttonIssueCar.text = "Issue Car"
+                        booking?.paymentStatus = PaymentStatus.PAID.type
+                        database.getReference("bookings").child(bookingId).setValue(booking)
+                        Toast.makeText(context, "Payement Completed", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
                     }
-                }else if (buttonIssueCar.text.equals("Issue Car")){
-                    buttonIssueCar.setOnClickListener {
-                        builder.setMessage("Please give Addons " + booking?.addOnsString + " to Customer")
-                        builder.setPositiveButton(android.R.string.ok) { dialog, which ->
-                            buttonIssueCar.text = "Process Return"
-                            booking?.bookingStatus = BookingStatus.IN_PROGRESS.type
-                            database.getReference("bookings").child(bookingId).setValue(booking)
-                            Toast.makeText(context, "Car Issued", Toast.LENGTH_SHORT).show()
-                            dialog.dismiss()
-                        }
 
-                        builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
-                            dialog.dismiss()
-                        }
-
-                        builder.show()
+                    builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
+                        dialog.dismiss()
                     }
-                }else if (buttonIssueCar.text.equals("Process Return")){
-                    buttonIssueCar.setOnClickListener {
-                        builder.setMessage("Please check if vehicle has any scratches or any damages!")
-                        builder.setPositiveButton(android.R.string.ok) { dialog, which ->
-                            buttonIssueCar.visibility=View.INVISIBLE
-                            booking?.bookingStatus = BookingStatus.COMPLETED.type
-                            database.getReference("bookings").child(bookingId).setValue(booking)
-                            Toast.makeText(context, "Car Returned", Toast.LENGTH_SHORT).show()
-                            dialog.dismiss()
-                        }
 
-                        builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
-                            dialog.dismiss()
-                        }
+                    builder.show()
 
-                        builder.show()
+                } else if (buttonIssueCar.text.equals("Issue Car")) {
+
+                    builder.setMessage("Please give Addons " + booking?.addOnsString + " to Customer")
+                    builder.setPositiveButton(android.R.string.ok) { dialog, which ->
+                        buttonIssueCar.text = "Process Return"
+                        booking?.bookingStatus = BookingStatus.IN_PROGRESS.type
+                        database.getReference("bookings").child(bookingId).setValue(booking)
+                        Toast.makeText(context, "Car Issued", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
                     }
+
+                    builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
+                        dialog.dismiss()
+                    }
+
+                    builder.show()
+
+                } else if (buttonIssueCar.text.equals("Process Return")) {
+
+                    builder.setMessage("Please check if vehicle has any scratches or any damages!")
+                    builder.setPositiveButton(android.R.string.ok) { dialog, which ->
+                        buttonIssueCar.visibility = View.INVISIBLE
+                        booking?.bookingStatus = BookingStatus.COMPLETED.type
+                        database.getReference("bookings").child(bookingId).setValue(booking)
+                        Toast.makeText(context, "Car Returned", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+
+                    builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
+                        dialog.dismiss()
+                    }
+
+                    builder.show()
+
                 }
+            }
 
 
             
