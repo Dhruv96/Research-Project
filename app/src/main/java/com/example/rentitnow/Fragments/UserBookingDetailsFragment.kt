@@ -12,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.rentitnow.Data.Booking
+import com.example.rentitnow.Data.BookingStatus
+import com.example.rentitnow.Data.UserRating
 import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
@@ -26,6 +28,7 @@ class UserBookingDetailsFragment : Fragment() {
 
     lateinit var booking: Booking
     lateinit var bookingId: String
+    var userRating: UserRating? = null
     val database = FirebaseDatabase.getInstance()
 
     companion object {
@@ -52,6 +55,7 @@ class UserBookingDetailsFragment : Fragment() {
             bookingId = requireArguments().getString(BOOKING_ID) as String
         }
         shorOrHideDeleteBookingButton()
+        showOrHideRateBookingButton()
         addonsString.text = booking.addOnsString
         pickupdate.text = booking.pickUpDate
         returndate.text = booking.returnDate
@@ -84,6 +88,37 @@ class UserBookingDetailsFragment : Fragment() {
                 dialog.dismiss()
             }
             builder.show()
+        }
+
+        rateBookingBtn.setOnClickListener {
+            val userRatingFragment = UserRatingFragment()
+            val bundle = Bundle()
+            bundle.putSerializable(UserRatingFragment.BOOKING, booking)
+            bundle.putString(UserRatingFragment.BOOKING_ID, bookingId)
+            bundle.putSerializable(UserRatingFragment.USER_RATING, userRating)
+            userRatingFragment.arguments = bundle
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_user, userRatingFragment, "findThisFragment")
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    private fun showOrHideRateBookingButton() {
+        if(booking.bookingStatus == BookingStatus.COMPLETED.type) {
+            rateBookingBtn.visibility = View.VISIBLE
+            database.getReference("UserRatings").child(bookingId).get().addOnSuccessListener {
+                if(it.exists()) {
+                    rateBookingBtn.text = "EDIT Rating"
+                    userRating = it.getValue(UserRating::class.java)!!
+                }
+                else {
+                    rateBookingBtn.text = "Rate this Booking"
+                }
+            }
+        }
+        else {
+            rateBookingBtn.visibility = View.INVISIBLE
         }
     }
 
