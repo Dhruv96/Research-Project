@@ -2,18 +2,15 @@ package com.example.rentitnow.Fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.Data.BookingStatus
-import com.example.rentitnow.Data.UserRating
+import com.example.rentitnow.Data.Rating
 import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
@@ -28,7 +25,7 @@ class UserBookingDetailsFragment : Fragment() {
 
     lateinit var booking: Booking
     lateinit var bookingId: String
-    var userRating: UserRating? = null
+    var userRating: Rating? = null
     val database = FirebaseDatabase.getInstance()
 
     companion object {
@@ -91,11 +88,11 @@ class UserBookingDetailsFragment : Fragment() {
         }
 
         rateBookingBtn.setOnClickListener {
-            val userRatingFragment = UserRatingFragment()
+            val userRatingFragment = RatingFragment()
             val bundle = Bundle()
-            bundle.putSerializable(UserRatingFragment.BOOKING, booking)
-            bundle.putString(UserRatingFragment.BOOKING_ID, bookingId)
-            bundle.putSerializable(UserRatingFragment.USER_RATING, userRating)
+            bundle.putSerializable(RatingFragment.BOOKING, booking)
+            bundle.putString(RatingFragment.BOOKING_ID, bookingId)
+            bundle.putSerializable(RatingFragment.USER_RATING, userRating)
             userRatingFragment.arguments = bundle
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_user, userRatingFragment, "findThisFragment")
@@ -110,7 +107,7 @@ class UserBookingDetailsFragment : Fragment() {
             database.getReference("UserRatings").child(bookingId).get().addOnSuccessListener {
                 if(it.exists()) {
                     rateBookingBtn.text = "EDIT Rating"
-                    userRating = it.getValue(UserRating::class.java)!!
+                    userRating = it.getValue(Rating::class.java)!!
                 }
                 else {
                     rateBookingBtn.text = "Rate this Booking"

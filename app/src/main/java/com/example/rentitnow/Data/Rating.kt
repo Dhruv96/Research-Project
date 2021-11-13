@@ -2,7 +2,7 @@ package com.example.rentitnow.Data
 
 import java.io.Serializable
 
-data class UserRating(
+data class Rating(
     val userId: String="",
     val vendorId:String="",
     val bookingId:String="",
