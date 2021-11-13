@@ -39,9 +39,6 @@ class VendorCurrentBookingsAdapter(
             cardCellBinding.finalpriceTextView.text = "$" + booking.finalPrice.toString()
             fetchVehicleDetails(booking.vehicleId, cardCellBinding.carNameTextView, cardCellBinding.vehicleImageView)
             fetchUserDetails(booking.userId, cardCellBinding.textViewUserName)
-            if(booking.bookingStatus== BookingStatus.COMPLETED.type){
-                cardCellBinding.buttonViewBookingDetails.visibility=View.INVISIBLE
-            }
             cardCellBinding.buttonViewBookingDetails.setOnClickListener{
                 val bundle = Bundle()
                 val vendorBookingsDetails = VendorBookingDetailsFragment()
@@ -85,17 +82,7 @@ class VendorCurrentBookingsAdapter(
 
     override fun onBindViewHolder(holder: CurrentBookingsHolder, position: Int) {
         holder.bindVehicle(bookings[position], bookingIds[position])
-//        holder.itemView.setOnClickListener({
-//            val bundle = Bundle()
-//            val vendorBookingsDetails = VendorBookingDetailsFragment()
-//            bundle.putParcelable(VendorBookingDetailsFragment.BOOKING,bookings.get(position))
-//            bundle.putString(VendorBookingDetailsFragment.BOOKING,bookingIds.get(position))
-//            vendorBookingsDetails.arguments = bundle
-//            (context as NavigationActivityVendor).supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container_vendor, vendorBookingsDetails, "findThisFragment")
-//                .addToBackStack(null)
-//                .commit()
-//        })
+
     }
 
     override fun getItemCount(): Int {

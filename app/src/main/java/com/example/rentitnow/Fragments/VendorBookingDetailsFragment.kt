@@ -10,9 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.example.rentitnow.Data.Booking
-import com.example.rentitnow.Data.BookingStatus
-import com.example.rentitnow.Data.PaymentStatus
+import com.example.rentitnow.Data.*
 import com.example.rentitnow.R
 import com.example.rentitnow.User
 import com.example.rentitnow.Vehicle
@@ -29,6 +27,7 @@ class VendorBookingDetailsFragment : Fragment() {
     var vehicle: Vehicle? = null
     var user: User? = null
     val database = FirebaseDatabase.getInstance()
+    var vendorRating: Rating? = null
     companion object {
         val BOOKING = "booking"
         val BOOKINGID = "bookingid"
@@ -50,6 +49,7 @@ class VendorBookingDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments != null) {
+            vendorRatingButton.visibility = View.INVISIBLE
             booking = requireArguments().getParcelable<Booking>(BOOKING)
             bookingId = requireArguments().getString(BOOKINGID).toString()
             textViewBookingId.text = bookingId.substring(0,10)
@@ -60,6 +60,7 @@ class VendorBookingDetailsFragment : Fragment() {
             fetchUserDetails(booking?.userId.toString(), textViewUserName)
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Confirm Action")
+
             if (booking?.paymentStatus==PaymentStatus.PENDING.type){
                 buttonIssueCar.text="Take Payement"
 
@@ -117,6 +118,16 @@ class VendorBookingDetailsFragment : Fragment() {
                         booking?.bookingStatus = BookingStatus.COMPLETED.type
                         database.getReference("bookings").child(bookingId).setValue(booking)
                         Toast.makeText(context, "Car Returned", Toast.LENGTH_SHORT).show()
+                        vendorRatingButton.visibility = View.VISIBLE
+                        database.getReference("VendorRatings").child(bookingId).get()
+                            .addOnSuccessListener {
+                                if (it.exists()) {
+                                    vendorRatingButton.text = "EDIT Rating"
+                                    vendorRating = it.getValue(Rating::class.java)!!
+                                } else {
+                                    vendorRatingButton.text = "Rate this Booking"
+                                }
+                            }
                         dialog.dismiss()
                     }
 
@@ -128,6 +139,35 @@ class VendorBookingDetailsFragment : Fragment() {
 
                 }
             }
+                if (booking?.bookingStatus.equals(BookingStatus.COMPLETED.type)){
+                    buttonIssueCar.visibility = View.INVISIBLE
+                    vendorRatingButton.visibility = View.VISIBLE
+                    database.getReference("VendorRatings").child(bookingId).get().addOnSuccessListener {
+                        if(it.exists()) {
+                            vendorRatingButton.text = "EDIT Rating"
+                            vendorRating = it.getValue(Rating::class.java)!!
+                        }
+                        else {
+                            vendorRatingButton.text = "Rate this Booking"
+                        }
+                    }
+
+                }
+
+            vendorRatingButton.setOnClickListener {
+                val vendorRatingFragment = RatingFragment()
+                val bundle = Bundle()
+                bundle.putSerializable(RatingFragment.BOOKING, booking)
+                bundle.putString(RatingFragment.BOOKING_ID, bookingId)
+                bundle.putSerializable(RatingFragment.USER_RATING, vendorRating)
+                vendorRatingFragment.arguments = bundle
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_vendor, vendorRatingFragment, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+
 
 
             
