@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
+import com.example.rentitnow.Vendor
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_vehicle_details.*
 import java.util.*
@@ -120,9 +121,20 @@ class VehicleDetailsFragment : Fragment() {
     private fun fetchVendorName() {
         val database = FirebaseDatabase.getInstance()
         database.getReference("vendors").child(vehicle!!.vendorID).get().addOnSuccessListener {
-            val firstname=it.child("fname").value.toString()
-            val lastname=it.child("lname").value.toString()
+            val vendor = it.getValue(Vendor::class.java)
+            val firstname= vendor?.fname
+            val lastname= vendor?.lname
             vendorName.text = firstname + " " + lastname
+            vendorName.setOnClickListener {
+                val vendorDetailsFragment = VendorDetailsFragment()
+                val bundle = Bundle()
+                bundle.putSerializable(VendorDetailsFragment.VENDOR,vendor)
+                vendorDetailsFragment.arguments = bundle
+                (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_user, vendorDetailsFragment, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
             .addOnFailureListener{
                 Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
