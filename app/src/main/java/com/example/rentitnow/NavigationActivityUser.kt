@@ -66,28 +66,41 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
         val user = auth.currentUser
         val id=user?.uid
 
-        databaseRef.child(id.toString()).get().addOnSuccessListener {
-            if (it.exists()){
-                val firstname=it.child("fname").value
-                val email=it.child("email").value
-                val photoURL=it.child("profileImgUrl").value
+//        databaseRef.child(id.toString()).get().addOnSuccessListener {
+//            if (it.exists()){
+//                val firstname=it.child("fname").value
+//                val email=it.child("email").value
+//                val photoURL=it.child("profileImgUrl").value
+//                nameViewProfile.setText(firstname.toString())
+//                emailViewProfile.setText(email.toString())
+//                Glide.with(this).load(photoURL).into(userimageView)
+//            }
+//        }.addOnFailureListener {
+//            Log.e("FBLOGIN_FAILD", "error retriving data")
+//        }
+
+        databaseRef.child(id.toString()).addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userData = snapshot.getValue(User::class.java)
+                val firstname = userData?.fname
+                val email = userData?.email
+                val photoUrl = userData?.profileImgUrl
                 nameViewProfile.setText(firstname.toString())
                 emailViewProfile.setText(email.toString())
-                Glide.with(this).load(photoURL).into(userimageView)
+                Glide.with(this@NavigationActivityUser).load(photoUrl).into(userimageView)
             }
-        }.addOnFailureListener {
-            Log.e("FBLOGIN_FAILD", "error retriving data")
-        }
 
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@NavigationActivityUser, error.message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-
-
 
     }
     
