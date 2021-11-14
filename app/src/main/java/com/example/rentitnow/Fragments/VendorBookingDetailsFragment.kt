@@ -10,10 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.example.rentitnow.*
 import com.example.rentitnow.Data.*
-import com.example.rentitnow.R
-import com.example.rentitnow.User
-import com.example.rentitnow.Vehicle
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -170,6 +168,8 @@ class VendorBookingDetailsFragment : Fragment() {
 
 
 
+
+
             
 
 
@@ -189,6 +189,16 @@ class VendorBookingDetailsFragment : Fragment() {
                 database.getReference("users").child(userId).get().addOnSuccessListener {
                     user = it.getValue(User::class.java)
                     userName.text = user?.fname + " " + user?.lname
+                    userName.setOnClickListener{
+                        val userDetailsFragment = UserRatingDetailsFragment()
+                        val bundle = Bundle()
+                        bundle.putSerializable(UserRatingDetailsFragment.USER,user)
+                        userDetailsFragment.arguments = bundle
+                        (context as NavigationActivityVendor).supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_vendor, userDetailsFragment, "findThisFragment")
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }.addOnFailureListener{
                     println(it.localizedMessage)
                 }
