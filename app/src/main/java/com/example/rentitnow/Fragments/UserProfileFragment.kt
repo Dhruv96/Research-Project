@@ -1,8 +1,5 @@
 package com.example.rentitnow.Fragments
 
-import android.app.ProgressDialog
-import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,19 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
-import com.example.rentitnow.LicenseDetailsActivity
-import com.example.rentitnow.NavigationActivityUser
 import com.example.rentitnow.R
 import com.example.rentitnow.User
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_user_home.*
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.fragment_user_profile.SelectUserImage
 import kotlinx.android.synthetic.main.fragment_user_profile.editTextEmail
@@ -32,9 +24,6 @@ import kotlinx.android.synthetic.main.fragment_user_profile.editTextFirstName
 import kotlinx.android.synthetic.main.fragment_user_profile.editTextLastName
 import kotlinx.android.synthetic.main.fragment_user_profile.femaleRdb
 import kotlinx.android.synthetic.main.fragment_user_profile.maleRdb
-import kotlinx.android.synthetic.main.fragment_user_tab.*
-import kotlinx.android.synthetic.main.nav_header.*
-import java.lang.System.load
 import java.sql.DriverManager
 
 
