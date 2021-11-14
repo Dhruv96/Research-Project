@@ -18,7 +18,6 @@ import com.example.rentitnow.Fragments.PublishCarFragment
 import com.example.rentitnow.Fragments.PublishedVehiclesFragment
 import com.example.rentitnow.Fragments.VendorBookingHistoryFragment
 import com.example.rentitnow.Fragments.VendorHomeFragment
-import com.example.rentitnow.Navigation.UserHomeFragment
 import com.example.rentitnow.Navigation.VendorProfileFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -64,19 +63,36 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
         databaseRef=FirebaseDatabase.getInstance().getReference("vendors")
         val user = auth.currentUser
         val id=user?.uid
-        databaseRef.child(id.toString()).get().addOnSuccessListener {
-            if (it.exists()){
-                val firstname=it.child("fname").value
-                val email=it.child("email").value
-                val photoURL=it.child("profileImgUrl").value
+//        databaseRef.child(id.toString()).get().addOnSuccessListener {
+//            if (it.exists()){
+//                val firstname=it.child("fname").value
+//                val email=it.child("email").value
+//                val photoURL=it.child("profileImgUrl").value
+//                nameViewProfile.setText(firstname.toString())
+//                emailViewProfile.setText(email.toString())
+//                Glide.with(this).load(photoURL).into(userimageView)
+//
+//            }
+//        }.addOnFailureListener {
+//            Log.e("FBLOGIN_FAILD", "error retriving data")
+//        }
+
+        databaseRef.child(id.toString()).addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val vendorData = snapshot.getValue(Vendor::class.java)
+                val firstname = vendorData?.fname
+                val email = vendorData?.email
+                val photoUrl = vendorData?.profileImgUrl
                 nameViewProfile.setText(firstname.toString())
                 emailViewProfile.setText(email.toString())
-                Glide.with(this).load(photoURL).into(userimageView)
-
+                Glide.with(this@NavigationActivityVendor).load(photoUrl).into(userimageView)
             }
-        }.addOnFailureListener {
-            Log.e("FBLOGIN_FAILD", "error retriving data")
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@NavigationActivityVendor, error.message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
 
 

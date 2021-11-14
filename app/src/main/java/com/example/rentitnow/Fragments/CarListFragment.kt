@@ -11,6 +11,7 @@ import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.VehicleAdapterUserHome
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
+import com.example.rentitnow.Vendor
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,11 +23,16 @@ import java.text.SimpleDateFormat
 
 
 class CarListFragment : Fragment() {
+    lateinit var pickupLoc: String
     val auth = FirebaseAuth.getInstance()
     val database = FirebaseDatabase.getInstance()
     var vehicles = mutableListOf<Vehicle>()
     var vehicleIds = mutableListOf<String>()
     var bookings = mutableListOf<Booking>()
+    var vendors = mutableListOf<Vendor>()
+    var vendorIds = mutableListOf<String>()
+    var vehiclesTobeDeleted = mutableListOf<Vehicle>()
+    var vehicleIdsTobeDeleted = mutableListOf<String>()
     lateinit var pickupDate: String
     lateinit var returnDate: String
     lateinit var listener1: ValueEventListener
@@ -56,18 +62,43 @@ class CarListFragment : Fragment() {
             pickupDate = requireArguments().getString(PICKUP_DATE).toString()
             returnDate = requireArguments().getString(RETURN_DATE).toString()
             println("PICKUP DATE: ${pickupDate}")
-            val pickuploc = requireArguments().getString(pickUpLocation)
+            pickupLoc = requireArguments().getString(pickUpLocation).toString()
             val noofdays = requireArguments().getString(NoofDays)
             textViewPickUpDate.text = pickupDate
             textViewReturnDate.text = returnDate
             recyclerViewVehicles.apply {
                 layoutManager = LinearLayoutManager(activity)
-                adapter = VehicleAdapterUserHome(vehicles, vehicleIds, requireActivity(), pickupDate, returnDate,pickuploc,noofdays)
+                adapter = VehicleAdapterUserHome(vehicles, vehicleIds, requireActivity(), pickupDate, returnDate,pickupLoc,noofdays)
             }
             println("Inside onviewcreated")
-            fetchVehicles()
+            fetchVendors()
         }
 
+    }
+
+    private fun fetchVendors() {
+        database.getReference("vendors").orderByChild("city").equalTo(pickupLoc).addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                vendorIds.clear()
+                vendors.clear()
+                val vendorsList = snapshot.children
+                vendorsList.forEach {
+                    val vendorObj = it.getValue(Vendor::class.java)
+                    val vendor_id = it.key
+                    if (vendorObj != null && vendor_id != null) {
+                        vendors.add(vendorObj)
+                        vendorIds.add(vendor_id)
+                    }
+                }
+
+                fetchVehicles()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(activity, error.message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun fetchVehicles() {
@@ -134,8 +165,21 @@ class CarListFragment : Fragment() {
                        vehicles.removeAt(index)
                    }
                }
+
            }
 
+        vehicles.forEach {
+            if(vendorIds.contains(it.vendorID)) {
+                return@forEach
+            }
+            else {
+                val index = vehicles.indexOf(it)
+                vehicleIdsTobeDeleted.add(vehicleIds[index])
+                vehiclesTobeDeleted.add(it)
+            }
+        }
+        vehicleIds.removeAll(vehicleIdsTobeDeleted)
+        vehicles.removeAll(vehiclesTobeDeleted)
         recyclerViewVehicles.adapter?.notifyDataSetChanged()
         }
 
