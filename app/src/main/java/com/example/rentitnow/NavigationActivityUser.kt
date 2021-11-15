@@ -136,6 +136,7 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
                 editor.apply()
                 Toast.makeText(this, "Successfully signed out.", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
             2 -> {
                 googleSignInClient.signOut()
@@ -146,11 +147,15 @@ class NavigationActivityUser : AppCompatActivity(), NavigationView.OnNavigationI
                             editor.apply()
                             Toast.makeText(this, "Successfully signed out.", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this, LoginActivity::class.java))
+                            finish()
                         })
             }
             3 -> {
             }
-            else -> startActivity(Intent(this, LoginActivity::class.java))
+            else ->  {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
         }
     }
 
