@@ -12,15 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RentItNow">
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity android:name=".NavigationActivityVendor" />
         <activity android:name=".NavigationActivityUser" />
         <activity android:name=".SignInWithSocialAdditionalVendorData" />
         <activity android:name=".SignInWithGoogleAdditionalDetails" />
         <activity android:name=".LicenseDetailsActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
