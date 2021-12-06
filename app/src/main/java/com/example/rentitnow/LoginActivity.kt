@@ -4,6 +4,7 @@ package com.example.rentitnow
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -27,9 +28,8 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 import android.text.TextUtils
-
-
-
+import android.graphics.drawable.ColorDrawable
+import androidx.appcompat.app.ActionBar
 
 
 class LoginActivity : AppCompatActivity() {
@@ -44,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login)
         // Configure Google Sign In

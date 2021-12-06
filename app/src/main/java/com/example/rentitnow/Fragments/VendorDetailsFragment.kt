@@ -64,7 +64,7 @@ class VendorDetailsFragment : Fragment() {
                         reviewsList.add(rating!!.feedback)
                         sum += rating.rating
                     }
-                    vendorRating.text = (sum/snapshot.childrenCount).toString()
+                    vendorRating.text = String.format("%.2f",(sum/snapshot.childrenCount))
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, reviewsList)
                     reviewsListView.adapter = adapter
                 }

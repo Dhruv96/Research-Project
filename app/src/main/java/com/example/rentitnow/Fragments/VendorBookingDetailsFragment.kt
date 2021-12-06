@@ -54,7 +54,7 @@ class VendorBookingDetailsFragment : Fragment() {
             TextViewStartDate.text = booking?.pickUpDate
             textViewEndDate.text = booking?.returnDate
             finalpriceTextView.text = "$" + booking?.finalPrice.toString()
-            fetchVehicleDetails(booking?.vehicleId.toString(), carNameTextView, vehicleImageView)
+            fetchVehicleDetails(booking?.vehicleId.toString(), carNameTextView, vehicleImageView,view)
             fetchUserDetails(booking?.userId.toString(), textViewUserName)
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Confirm Action")
@@ -176,11 +176,12 @@ class VendorBookingDetailsFragment : Fragment() {
         }
 
     }
-            fun fetchVehicleDetails(vehicleId: String, vehicleName: TextView, imageView: ImageView) {
+            fun fetchVehicleDetails(vehicleId: String, vehicleName: TextView, imageView: ImageView,view: View) {
                 database.getReference("vehicles").child(vehicleId).get().addOnSuccessListener {
                     vehicle = it.getValue(Vehicle::class.java)
                     vehicleName.text = vehicle?.manufacture + " " + vehicle?.model
                     Glide.with(context).load(vehicle?.imageUrls?.get(0)).into(imageView)
+
                 }.addOnFailureListener{
                     println(it.localizedMessage)
                 }
