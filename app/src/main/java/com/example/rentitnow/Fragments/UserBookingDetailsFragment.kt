@@ -17,6 +17,7 @@ import com.example.rentitnow.Vehicle
 import com.example.rentitnow.Vendor
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_user_booking_details.*
+import kotlinx.android.synthetic.main.fragment_vehicle_details.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -145,6 +146,16 @@ class UserBookingDetailsFragment : Fragment() {
         database.getReference("vendors").child(vendorId).get().addOnSuccessListener {
             val vendor = it.getValue(Vendor::class.java)
             vendorname.text = vendor?.fname + " " + vendor?.lname
+            vendorname.setOnClickListener {
+                val vendorDetailsFragment = VendorDetailsFragment()
+                val bundle = Bundle()
+                bundle.putSerializable(VendorDetailsFragment.VENDOR,vendor)
+                vendorDetailsFragment.arguments = bundle
+                (context as NavigationActivityUser).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_user, vendorDetailsFragment, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit()
+            }
             Glide.with(context).load(vendor?.profileImgUrl).into(vendorImg)
         }.addOnFailureListener{
             println(it.localizedMessage)
