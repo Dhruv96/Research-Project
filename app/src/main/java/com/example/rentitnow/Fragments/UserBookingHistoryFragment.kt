@@ -11,21 +11,24 @@ import com.example.rentitnow.Adapters.HeaderAdapter
 import com.example.rentitnow.Adapters.UserBookingsAdapter
 import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.Data.BookingStatus
+import com.example.rentitnow.Data.BookingStatusSectionHeader
+import com.example.rentitnow.Helpers
 import com.example.rentitnow.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_user_booking_history.*
 import kotlinx.android.synthetic.main.fragment_vendor_home.*
 
 
 class UserBookingHistoryFragment : Fragment() {
 
+    var loader: KProgressHUD? = null
     val database = FirebaseDatabase.getInstance()
     val auth = FirebaseAuth.getInstance()
-
     var bookings = mutableListOf<List<Booking>>()
     var bookingIds = mutableListOf<List<String>>()
     var sections = mutableListOf<String>()
@@ -47,6 +50,7 @@ class UserBookingHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loader = Helpers.getLoader(requireContext())
         bookingsRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = HeaderAdapter(bookings, bookingIds, sections, requireContext())
@@ -55,6 +59,7 @@ class UserBookingHistoryFragment : Fragment() {
     }
 
     private fun fetchBookings() {
+        loader?.show()
         val userId = auth.currentUser?.uid
         listener = database.getReference("bookings").orderByChild("userId").equalTo(userId)
             .addValueEventListener(object: ValueEventListener {
@@ -97,14 +102,15 @@ class UserBookingHistoryFragment : Fragment() {
                     bookingIds.add(listUpcomingIds)
                     bookings.add(listCompleted)
                     bookingIds.add(listCompletedIds)
-                    sections.add(BookingStatus.IN_PROGRESS.type)
-                    sections.add(BookingStatus.UPCOMING.type)
-                    sections.add(BookingStatus.COMPLETED.type)
+                    sections.add(BookingStatusSectionHeader.IN_PROGRESS.type)
+                    sections.add(BookingStatusSectionHeader.UPCOMING.type)
+                    sections.add(BookingStatusSectionHeader.COMPLETED.type)
                     println(bookings.size)
                     println(listCompleted.size)
                     println(listInProgress.size)
                     println(listUpcoming.size)
                     //bookingsRecyclerView.adapter = HeaderAdapter(bookings, bookingIds, sections, requireContext())
+                    loader?.dismiss()
                     bookingsRecyclerView.adapter?.notifyDataSetChanged()
                 }
 

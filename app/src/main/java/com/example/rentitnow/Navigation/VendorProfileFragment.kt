@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
+import com.example.rentitnow.Helpers
 import com.example.rentitnow.R
 import com.example.rentitnow.User
 import com.example.rentitnow.Vendor
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.fragment_user_profile.SelectUserImage
 import kotlinx.android.synthetic.main.fragment_user_profile.editTextEmail
@@ -28,7 +30,7 @@ import java.sql.DriverManager
 
 
 class VendorProfileFragment : Fragment() {
-    
+    var loader: KProgressHUD? = null
     private lateinit var databaseRef : DatabaseReference
     private lateinit var auth: FirebaseAuth
     lateinit var fileUrl: Uri
@@ -49,6 +51,7 @@ class VendorProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loader = Helpers.getLoader(requireContext())
         auth = FirebaseAuth.getInstance()
 
         databaseRef= FirebaseDatabase.getInstance().getReference("vendors")
@@ -73,14 +76,16 @@ class VendorProfileFragment : Fragment() {
                     selectImageFromGalleryResult.launch("image/*")
                 })
 
-                update_btn_Vendor.setOnClickListener({
-                    val fname=editTextFirstName.text.toString()
-                    val lname=editTextLastName.text.toString()
-                    val phoneNo=editTextPhone.text.toString()
+                update_btn_Vendor.setOnClickListener {
+                    loader?.show()
+                    val fname = editTextFirstName.text.toString()
+                    val lname = editTextLastName.text.toString()
+                    val phoneNo = editTextPhone.text.toString()
                     if (
                         fname.trim() != "" &&
                         lname.trim() != "" &&
-                        phoneNo.trim() != ""  ) {
+                        phoneNo.trim() != ""
+                    ) {
                         if (!this::fileUrl.isInitialized) {
                             val vendor = Vendor(
                                 fname,
@@ -93,12 +98,13 @@ class VendorProfileFragment : Fragment() {
                             )
                             databaseRef.child(id.toString()).setValue(vendor)
 
+                            loader?.dismiss()
                             Toast.makeText(
                                 context,
                                 "Profile Updated successfully!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }else {
+                        } else {
 
 
                             val currentUserImageRef =
@@ -121,6 +127,7 @@ class VendorProfileFragment : Fragment() {
                                         downloadUrl
                                     )
                                     databaseRef.child(id.toString()).setValue(vendor)
+                                    loader?.dismiss()
                                     Toast.makeText(
                                         context,
                                         "Profile Updated successfully!",
@@ -131,12 +138,12 @@ class VendorProfileFragment : Fragment() {
                             }
                         }
                     }
-                })
-
+                }
 
 
             }
         }.addOnFailureListener {
+            loader?.dismiss()
             Log.e("FBLOGIN_FAILD", "error retriving data")
         }
 

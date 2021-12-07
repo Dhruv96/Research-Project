@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rentitnow.Helpers
 import com.example.rentitnow.R
 import com.example.rentitnow.Vehicle
 import com.example.rentitnow.VehicleAdapter
@@ -15,11 +16,13 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_published_vehicles.*
 import kotlinx.android.synthetic.main.vehicle_recyclerview_item.*
 
 
 class PublishedVehiclesFragment : Fragment() {
+    var loader: KProgressHUD? = null
     var vehicles = mutableListOf<Vehicle>()
     var vehicleids = mutableListOf<String>()
     val database = FirebaseDatabase.getInstance()
@@ -39,6 +42,7 @@ class PublishedVehiclesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loader = Helpers.getLoader(requireContext())
         vehiclesRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = VehicleAdapter(vehicles, requireActivity(), vehicleids)
@@ -51,6 +55,7 @@ class PublishedVehiclesFragment : Fragment() {
     }
 
     private fun fetchPublishedCars() {
+        loader?.show()
         val vendorID = auth.currentUser!!.uid
         listener = database.getReference("vehicles").
         orderByChild("vendorID").equalTo(vendorID).addValueEventListener(object: ValueEventListener{
@@ -68,7 +73,7 @@ class PublishedVehiclesFragment : Fragment() {
                     }
                 }
                 println("Vehicles"+vehicles)
-
+                loader?.dismiss()
                 vehiclesRecyclerView.adapter?.notifyDataSetChanged()
             }
 

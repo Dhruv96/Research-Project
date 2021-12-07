@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.widget.EditText
+import com.kaopiz.kprogresshud.KProgressHUD
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -106,8 +107,14 @@ class Helpers {
             timePickerDialog.show()
         }
 
+        fun getLoader(context: Context): KProgressHUD? {
+            val loader = KProgressHUD.create(context)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+            return loader
+        }
 
     }
-
 
 }
