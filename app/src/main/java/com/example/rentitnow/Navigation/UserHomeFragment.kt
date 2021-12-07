@@ -92,6 +92,7 @@ class UserHomeFragment : Fragment() {
                     }
 
                 } catch (exception: Exception) {
+                    println(exception.localizedMessage)
                     Toast.makeText(view.context, "Unable to find difference", Toast.LENGTH_SHORT)
                             .show()
                 }

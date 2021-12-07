@@ -16,6 +16,12 @@ enum class BookingStatus (val type: String){
         COMPLETED("completed")
 }
 
+enum class BookingStatusSectionHeader(val type: String) {
+        UPCOMING("UPCOMING"),
+        IN_PROGRESS("IN PROGRESS"),
+        COMPLETED("COMPLETED")
+}
+
 
 @Parcelize
 data class Booking(

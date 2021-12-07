@@ -7,22 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rentitnow.*
 import com.example.rentitnow.Data.Booking
-import com.example.rentitnow.VehicleAdapterUserHome
-import com.example.rentitnow.R
-import com.example.rentitnow.Vehicle
-import com.example.rentitnow.Vendor
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_car_list.*
 import kotlinx.android.synthetic.main.fragment_published_vehicles.*
 import java.text.SimpleDateFormat
 
 
 class CarListFragment : Fragment() {
+    var loader: KProgressHUD? = null
     lateinit var pickupLoc: String
     val auth = FirebaseAuth.getInstance()
     val database = FirebaseDatabase.getInstance()
@@ -58,6 +57,7 @@ class CarListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loader = Helpers.getLoader(requireContext())
         if(arguments != null) {
             pickupDate = requireArguments().getString(PICKUP_DATE).toString()
             returnDate = requireArguments().getString(RETURN_DATE).toString()
@@ -77,6 +77,7 @@ class CarListFragment : Fragment() {
     }
 
     private fun fetchVendors() {
+        loader?.show()
         database.getReference("vendors").orderByChild("city").equalTo(pickupLoc).addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 vendorIds.clear()
@@ -180,6 +181,7 @@ class CarListFragment : Fragment() {
         }
         vehicleIds.removeAll(vehicleIdsTobeDeleted)
         vehicles.removeAll(vehiclesTobeDeleted)
+        loader?.dismiss()
         recyclerViewVehicles.adapter?.notifyDataSetChanged()
         }
 

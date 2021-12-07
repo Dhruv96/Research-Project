@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
+import com.example.rentitnow.Helpers
 import com.example.rentitnow.R
 import com.example.rentitnow.User
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.fragment_user_profile.SelectUserImage
 import kotlinx.android.synthetic.main.fragment_user_profile.editTextEmail
@@ -29,6 +31,7 @@ import java.sql.DriverManager
 
 class UserProfileFragment : Fragment() {
 
+    var loader: KProgressHUD? = null
     private lateinit var databaseRef : DatabaseReference
     private lateinit var auth: FirebaseAuth
     lateinit var fileUrl: Uri
@@ -50,7 +53,7 @@ class UserProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
+        loader = Helpers.getLoader(requireContext())
         databaseRef= FirebaseDatabase.getInstance().getReference("users")
         val user = auth.currentUser
         val id=user?.uid
@@ -81,14 +84,16 @@ class UserProfileFragment : Fragment() {
                     selectImageFromGalleryResult.launch("image/*")
                 })
 
-                update_btn_User.setOnClickListener({
-                    val fname=editTextFirstName.text.toString()
-                    val lname=editTextLastName.text.toString()
+                update_btn_User.setOnClickListener {
+                    loader?.show()
+                    val fname = editTextFirstName.text.toString()
+                    val lname = editTextLastName.text.toString()
                     var gender = if (maleRdb.isChecked) "Male" else "Female"
                     if (
                         fname.trim() != "" &&
                         lname.trim() != "" &&
-                        (maleRdb.isChecked || femaleRdb.isChecked) ) {
+                        (maleRdb.isChecked || femaleRdb.isChecked)
+                    ) {
                         if (!this::fileUrl.isInitialized) {
                             val user = User(
                                 fname,
@@ -101,13 +106,13 @@ class UserProfileFragment : Fragment() {
                                 gender
                             )
                             databaseRef.child(id.toString()).setValue(user)
-
+                            loader?.dismiss()
                             Toast.makeText(
                                 context,
                                 "Profile Updated successfully!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }else {
+                        } else {
 
 
                             val currentUserImageRef =
@@ -131,6 +136,7 @@ class UserProfileFragment : Fragment() {
                                         gender
                                     )
                                     databaseRef.child(id.toString()).setValue(user)
+                                    loader?.dismiss()
                                     Toast.makeText(
                                         context,
                                         "Profile Updated successfully!",
@@ -141,10 +147,12 @@ class UserProfileFragment : Fragment() {
                             }
                         }
                     }
-                })
+
+                }
 
             }
         }.addOnFailureListener {
+            loader?.dismiss()
             Log.e("FBLOGIN_FAILD", "error retriving data")
         }
 

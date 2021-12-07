@@ -10,16 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rentitnow.Adapters.VendorCurrentBookingsAdapter
 import com.example.rentitnow.Data.Booking
 import com.example.rentitnow.Data.BookingStatus
+import com.example.rentitnow.Helpers
 import com.example.rentitnow.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.fragment_vendor_home.*
 
 
 class VendorBookingHistoryFragment : Fragment() {
+    var loader: KProgressHUD? = null
     var bookings = mutableListOf<Booking>()
     var bookingIds = mutableListOf<String>()
     val database = FirebaseDatabase.getInstance()
@@ -41,6 +44,7 @@ class VendorBookingHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loader = Helpers.getLoader(requireContext())
         recyclerViewBookings.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = VendorCurrentBookingsAdapter(bookings,bookingIds, requireActivity())
@@ -55,6 +59,7 @@ class VendorBookingHistoryFragment : Fragment() {
 
     }
     private fun fetchBookingDetails() {
+        loader?.show()
         val vendorID = auth.currentUser!!.uid
         listener = database.getReference("bookings").
         orderByChild("vendorId").equalTo(vendorID).addValueEventListener(object:
@@ -77,7 +82,7 @@ class VendorBookingHistoryFragment : Fragment() {
                         }
                     }
                 }
-
+                loader?.dismiss()
                 recyclerViewBookings.adapter?.notifyDataSetChanged()
             }
 

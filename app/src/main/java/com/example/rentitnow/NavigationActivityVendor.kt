@@ -109,8 +109,8 @@ class NavigationActivityVendor : AppCompatActivity(), NavigationView.OnNavigatio
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            //super.onBackPressed();
-            Toast.makeText(this, "No further back allowed.", Toast.LENGTH_SHORT).show()
+            super.onBackPressed();
+            //Toast.makeText(this, "No further back allowed.", Toast.LENGTH_SHORT).show()
         }
     }
 
