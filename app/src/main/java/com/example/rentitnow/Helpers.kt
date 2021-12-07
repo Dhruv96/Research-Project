@@ -67,7 +67,7 @@ class Helpers {
             setOnClickListener {
                 DatePickerDialog(
 
-                        context, datePickerOnDataSetListener, myCalendar
+                        context,R.style.AlertDialogTheme, datePickerOnDataSetListener, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)
                 ).run {
@@ -85,7 +85,7 @@ class Helpers {
             var mMinute = c[Calendar.MINUTE]
 
             // Launch Time Picker Dialog
-            val timePickerDialog = TimePickerDialog(context,
+            val timePickerDialog = TimePickerDialog(context,R.style.AlertDialogTheme,
                     OnTimeSetListener { view, hourOfDay, minute ->
                         mHour = hourOfDay
                         mMinute = minute

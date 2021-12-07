@@ -279,7 +279,7 @@
         android:id="@+id/viewTitle"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
-        android:background="#6200EE"
+        android:background="@color/colorPrimary"
         android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
