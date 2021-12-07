@@ -10,7 +10,7 @@
         android:id="@+id/textViewPastBookings"
         android:layout_width="0dp"
         android:layout_height="64dp"
-        android:background="#6200EE"
+        android:background="@color/colorPrimary"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:text="@string/pastBookings"

@@ -10,7 +10,7 @@
         android:id="@+id/viewHeading"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
-        android:background="#6200EE"
+        android:background="@color/colorPrimary"
         android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="5dp"
-        android:background="#6200EE"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewHeading" />
